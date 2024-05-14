@@ -1,0 +1,100 @@
+<%- include ("layout/header.ejs") %>
+
+			<div class="container login-container">
+				<div class="row">
+					<div class="col-lg-10 mx-auto ">
+						<div class="row  d-flex align-items-center justify-content-center">
+							<div class="col-md-6">
+								<div class="heading mb-1">
+									<h2 class="title">Register</h2>
+								</div>
+
+								<form action="#" id="registerForm">
+									<label for="login-email">
+										Username
+										<span class="required">*</span>
+									</label>
+									<div class="text-danger" id="userNameError"></div>
+									<input type="text" class="form-input form-wide" id="username"  />
+
+									<label for="login-password">
+										Email
+										<span class="required">*</span>
+									</label>
+									<input type="email" class="form-input form-wide" id="email"  />
+
+                                    <label for="login-email">
+										Mobile Number
+										<span class="required">*</span>
+									</label>
+									<input type="number" class="form-input form-wide" id="mobile_number"  />
+
+                                    <label for="login-email">
+										Password
+										<span class="required">*</span>
+									</label>
+									<input type="password" class="form-input form-wide" id="password"  />
+                                    
+                                    <label for="login-email">
+										Confirm Password
+										<span class="required">*</span>
+									</label>
+									<input type="password" class="form-input form-wide" id="confirm-password"  />
+
+									<div class="form-footer">
+										<div class="custom-control custom-checkbox mb-0">
+											<input type="checkbox" class="custom-control-input" id="lost-password" />
+											<label class="custom-control-label mb-0" for="lost-password">Remember me</label>
+										</div>
+
+										<a href="forgot-password.html"
+											class="forget-password text-dark form-footer-right">Forgot
+											Password?</a>
+									</div>
+									<button type="submit" class="btn btn-dark btn-md w-100">
+										LOGIN
+									</button>
+								</form>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</main><!-- End .main -->
+	</div><!-- End .page-wrapper -->
+
+
+
+	<a id="scroll-top" href="#top" title="Top" role="button"><i class="icon-angle-up"></i></a>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function(){
+			const form = document.getElementById('registerForm')
+
+			form.addEventListener('submit', function(event){
+				event.preventDefault();
+				
+				const userName = document.getElementById('username').value.trim();
+
+				if(userName === '' || userName === null){
+					document.getElementById('userNameError').textContent = 'Field is required'
+					return false;
+				}
+
+			})
+		})
+	</script>
+
+	<!-- Plugins JS File -->
+	<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/js/plugins.min.js"></script>
+
+	<!-- Main JS File -->
+	<script src="assets/js/main.min.js"></script>
+</body>
+
+</html>
+
+<%- include ("layout/footer.ejs") %>
