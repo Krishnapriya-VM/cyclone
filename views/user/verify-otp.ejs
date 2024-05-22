@@ -1,0 +1,103 @@
+<%- include('layout/header.ejs') %>
+
+<div class="container col-4 login_wrap widget-taber-content p-30 background-white border-radius-5 mt-30">
+    <div class="padding_eight_all bg-white">
+        <div class="heading_s1">
+            <h3 class="mb-30">Email Verification</h3>
+        </div>
+
+        <!-- Add your email verification modal content here -->
+
+        <!-- Add OTP input field -->
+        <div id="timer" class="text-muted text-center pt-10"></div>
+        <form action="/verify-otp" method="post">
+            <div class="form-group">
+                <label for="otp">Enter OTP:</label>
+                <br>
+                <input type="text" id="otp" name="otp" class="form-control" required>
+            </div>
+            <br>
+            <!-- Add Verify Email button -->
+            <button type="submit" class="btn btn-primary">Verify Email</button>
+            <br>
+            <!-- Add Resend OTP option -->
+            <br>
+            <div id="resend" style="display: none;">
+                <a href="#" id="resendLink" >Resend OTP</a>
+            </div>
+            <br>
+            <br>
+            <% if (locals.message&&message.length>0) { %>
+                <p class="text-danger">
+                    <%= message %>
+                </p>
+                <% } %>
+        </form>
+
+        <div class="text-muted text-center pt-25">
+            Already verified? <a href="/login">Login now</a>
+        </div>
+        <br>
+        <br>
+    </div>
+</div>
+<script>
+
+
+//     document.addEventListener("DOMContentLoaded", function() {
+//         var timeLimit = 60;
+//         var resendButton = document.getElementById("resend");
+//         var resendLink = document.getElementById("resendLink");
+//         var timerElement = document.getElementById("timer");
+//         var lastResendTime = localStorage.getItem("otpResendTime");
+        
+//         function startTimer(timeLeft) {
+//             timerElement.innerHTML = "Resend OTP in " + timeLeft + " seconds";
+//             var timerInterval = setInterval(function() {
+//                 timeLeft--;
+//                 localStorage.setItem('otpTime', timeLeft);
+//                 if (timeLeft < 0) {
+//                     clearInterval(timerInterval);
+//                     resendButton.style.display = "block";
+//                     timerElement.innerHTML = "";
+//                 } else {
+//                     timerElement.innerHTML = "Resend OTP in " + timeLeft + " seconds";
+//                 }
+//             }, 1000);
+//         }
+        
+//         function initializeTimer() {
+//             if (lastResendTime) {
+//                 var elapsedTime = Math.max(0, timeLimit - Math.floor((Date.now() - lastResendTime) / 1000));
+//                 if (elapsedTime === 0) {
+//                     resendButton.style.display = "block";
+//                 } else {
+//                     startTimer(elapsedTime);
+//                 }
+//             } else {
+//                 resendButton.style.display = "none";
+//             }
+//         }
+
+//         initializeTimer();
+//         let times = localStorage.getItem('otpTime');
+//         startTimer(times ? times : timeLimit);
+        
+//         resendLink.addEventListener("click", function(event) {
+//             var xhr = new XMLHttpRequest();
+//             xhr.open("POST", "/verifyotp/resendOtp", true);
+//             xhr.onreadystatechange = function() {
+//                 if (xhr.readyState == 4 && xhr.status == 200) {
+//                     localStorage.setItem("otpResendTime", Date.now());
+//                     resendButton.style.display = "none";
+//                     startTimer(timeLimit);
+//                 }
+//             };
+//             xhr.send();
+//             event.preventDefault();
+//         });
+//     })
+
+</script>
+
+<%- include('layout/footer.ejs') %>
