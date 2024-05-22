@@ -20,10 +20,15 @@ const googleCallback = async (req, res) => {
    
     const Email = req.user?.emails[0]?.value;
     const user = await User.findOne({ email: Email });
-    console.log(user);
+    const id = user._id.toString()
     if (user) {
+      const payload = {
+        _id : id
+      }
       const verified = await bcrypt.compare(req.user.id, user.password);
       if (verified) {
+        const token = jwt.createToken(payload);
+        res.cookie("token", token, {secure: true, httpOnly: true})
         res.redirect("/");
       } else {
         res.redirect("/user-login");
@@ -48,6 +53,7 @@ const googleCallback = async (req, res) => {
         })
         console.log(user);
         await user.save();
+        
         res.redirect('/')
       }else {
         res.redirect('/user-register') 
@@ -77,7 +83,6 @@ const loadUserRegister = async (req, res) => {
 };
 
 const registerUser = async (req, res) => {
-  console.log("sfad");
   try {
     const { fname, lname, email, mobile_number, password, confirm_password } =
       req.body;

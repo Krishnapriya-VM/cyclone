@@ -15,7 +15,6 @@ const isLoggedIn = async (req, res, next)=>{
                 if(user === null){
                     res.redirect("/user-login")
                 }else{
-                    console.log("hfgggfj");
                     req.user = user
                     req.userid = decodeToken._id
                     next();
@@ -31,11 +30,37 @@ const isLoggedIn = async (req, res, next)=>{
     }
 }
 
+const isLoggedOut = async (req, res, next)=>{
+    try {
+        if(req.cookies.token){
+            const decodeToken = await jwt.verifyToken(req.cookies.token);
+            if(decodeToken){
+                const user = await User.findOne({
+                    _id: decodeToken.id,
+                    isBlocked: false
+                });
+                if(user === null){
+                    next();
+                }else{
+                    req.userid = decoded.id;
+                    res.redirect('/')
+                }
+            }else{
+                console.log("error ccurred in decoding token");
+                next();
+            }
+        }else{
+            next();
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 const isHome = async (req, res, next) => {
     try {
         if (req.cookies.token) {
-            const decodeToken = await jwttoken.verifytoken(req.cookies.token);
+            const decodeToken = await jwt.verifyToken(req.cookies.token);
             if (decodeToken) {
                 const user = await User.findOne({ _id: decodeToken._id, isBlocked: false });
                 if (user === null) {
@@ -57,8 +82,11 @@ const isHome = async (req, res, next) => {
 }
 
 
+
+
 module.exports = {
     isLoggedIn,
+    isLoggedOut,
     isHome
 
 }

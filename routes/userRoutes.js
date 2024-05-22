@@ -11,19 +11,18 @@ router.get("/", userAuth.isHome, userController.loadHomePage);
 
 router.get("/user-profile",userAuth.isLoggedIn, userController.loadProfile)
 
-router.get("/user-login", userController.loadUserLogin);
-router.post("/user-login", userController.postLogin)
+router.get("/user-login", userAuth.isLoggedOut, userController.loadUserLogin);
+router.post("/user-login", userAuth.isLoggedOut, userController.postLogin);
 
-router.get("/google",userController.googleWindow,passport.authenticate("google", { scope: ["profile", "email"] }));
-router.get("/success",passport.authenticate("google", { failureRedirect: "/user-login" }),userController.googleCallback);
+router.get("/logout",userAuth.isLoggedIn, userController.logOut);
 
-router.get("/user-register", userController.loadUserRegister);
+router.get("/google",userAuth.isLoggedOut, userController.googleWindow,passport.authenticate("google", { scope: ["profile", "email"] }));
+router.get("/success", userAuth.isLoggedOut,passport.authenticate("google", { failureRedirect: "/user-login" }),userController.googleCallback);
 
-router.post("/user-register", userController.registerUser);
+router.get("/user-register", userAuth.isLoggedOut, userController.loadUserRegister);
+router.post("/user-register", userAuth.isLoggedOut, userController.registerUser);
 
-router.get("/verify-otp", userController.verifyUserOtp);
-router.post("/verify-otp", userController.confirmUserOtp);
-
-router.get("/logout", userController.logOut);
+router.get("/verify-otp", userAuth.isLoggedOut, userController.verifyUserOtp);
+router.post("/verify-otp", userAuth.isLoggedOut, userController.confirmUserOtp);
 
 module.exports = router;
