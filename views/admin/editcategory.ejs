@@ -1,0 +1,65 @@
+<%- include('layout/header.ejs')%>
+
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Edit Category</h2>
+                </div>
+                <div>
+                    <input type="text" placeholder="Search Categories" class="form-control bg-white">
+                </div>
+            </div>
+            <div class="card">
+                <% if(locals.message) { %>
+                    <div class="error1 alert alert-danger w-75"><%= locals.message %></div>
+                <% } %>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <form method="post" id="catform" action="/admin/editCategory" enctype="multipart/form-data">
+                                <% if(locals.category_data) { %>
+                                    <div class="mb-4">
+                                        <label for="catName" class="form-label">Name</label>
+                                        <input type="text" placeholder="Name" value="<%= locals.category_data.categoryname %>" class="form-control" id="category_name" name="category_name">
+                                        <p class="perror mb-2" id="error1" style="display: none; color: red;"></p>
+                                    </div>
+                                    <input type="hidden" name="id" value="<%=locals.category_data._id %>">
+                                    <div class="mb-4">
+                                        <label for="status" class="form-label">Status</label>
+                                        <select name="status" class="form-control" id="status" name="status">
+                                            <option value="0">Active</option>
+                                            <option value="1">Inactive</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-4">
+                                            <div>
+                                                <label for="img1"> Image</label>
+                                                <input type="file" id="catimage" name="catimage" class="form-control" accept="image/*">
+                                                <br>
+                                                <div class="row col-md-4">
+                                                    <img id="imagePreview" src="#" alt="Image Preview" style="display: none; max-width: 100px; max-height: 100px;">
+                                                    <button id="closeButton" style="display: none; border:none; width:5px; color: red;">X</button>
+                                                </div>
+                                                <p class="perror mb-2" id="error2" style="display: none; color: red;"></p>
+                                                <br><br>
+                                                <p>Old Image</p>
+                                                <img src="/public/image/<%= locals.category_data.image %>" alt="Image Preview" style="max-width: 100px; max-height: 100px;">
+                                            </div>
+                                    </div>
+                                <% } %>
+                                <div class="d-grid">
+                                    <button class="btn btn-primary">Edit category</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div> <!-- .row // -->
+                </div> <!-- card body .// -->
+            </div> <!-- card .// -->
+        </section> <!-- content-main end// -->
+
+
+<script src="/public/js/category.js"></script>
+
+
+<%- include('layout/footer.ejs') %>
+

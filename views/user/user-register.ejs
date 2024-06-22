@@ -15,43 +15,61 @@
 										<span class="required">*</span>
 									</label>
 									<div class="text-danger" id="fnameError"></div>
-									<input type="text" class="form-input form-wide" id="fname" name="fname" required />
-							
+									<input type="text" class="form-input form-wide" id="fname" name="fname">
+
+									<p id="fnameError" style="color: red;"></p>
+
 									<label for="lname">
 										Last Name
 										<span class="required">*</span>
 									</label>
 									<div class="text-danger" id="lnameError"></div>
-									<input type="text" class="form-input form-wide" id="lname" name="lname" required />
+									<input type="text" class="form-input form-wide" id="lname" name="lname">
+
+									<p id="lnameError" style="color: red;"></p>
+
 							
 									<label for="email">
 										Email
 										<span class="required">*</span>
 									</label>
 									<div class="text-danger" id="emailError"></div>
-									<input type="email" class="form-input form-wide" id="email" name="email" required />
+									<input type="email" class="form-input form-wide" id="email" name="email">
+
+									<p id="emailError" style="color: red;"></p>
+
 							
 									<label for="mobile_number">
 										Mobile Number
 										<span class="required">*</span>
 									</label>
 									<div class="text-danger" id="mobileNumberError"></div>
-									<input type="tel" class="form-input form-wide" id="mobile_number" name="mobile_number" required />
+									<input type="tel" class="form-input form-wide" id="mobile_number" name="mobile_number">
+
+									<p id="mobileNumberError" style="color: red;"></p>
+
 							
 									<label for="password">
 										Password
 										<span class="required">*</span>
 									</label>
 									<div class="text-danger" id="passwordError"></div>
-									<input type="password" class="form-input form-wide" id="password" name="password" required />
+									<input type="password" class="form-input form-wide" id="password" name="password">
+
+									<p id="passwordError" style="color: red;"></p>
+
+
 									<label for="confirm_password">
 										Confirm Password
 										<span class="required">*</span>
 									</label>
 									<div class="text-danger" id="confirmPasswordError"></div>
-									<input type="password" class="form-input form-wide" id="confirm_password" name="confirm_password" required />
+									<input type="password" class="form-input form-wide" id="confirm_password" name="confirm_password">
+
+									<p id="confirmPasswordError" style="color: red;"></p>
+									<br>
 							
-									<button type="submit" class="btn btn-dark btn-md w-100">REGISTER</button>
+									<button type="submit" style="font-size: 16px;" class="btn btn-dark btn-md w-100">REGISTER</button>
 								</form>
 								<div class="mb-2 mx-auto">
 									<p class="text-center mb-1 mx-1">OR</p>
@@ -103,6 +121,7 @@
 
 	<!-- Main JS File -->
 	<script src="public/assets/js/main.min.js"></script>
+	<script src="/public/js/registerValidation.js"></script>
 </body>
 
 </html>

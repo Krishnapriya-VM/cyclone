@@ -1,0 +1,79 @@
+<%- include('layout/header.ejs') %>
+
+
+<section class="content-main 2">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Products grid</h2>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <header class="card-header">
+            <div class="row gx-3">
+                <div class="col-lg-4 col-md-6 me-auto">
+                    <input type="text" placeholder="Search..." class="form-control">
+                </div>
+                <div class="col-lg-2 col-6 col-md-3">
+                    <select class="form-select">
+                        
+                    </select>
+                </div>
+                <div class="col-lg-2 col-6 col-md-3">
+                    <select class="form-select">
+                        
+                    </select>
+                </div>
+            </div>
+        </header> <!-- card-header end// -->
+        <div class="card-body">
+                <div class="row product d-flex  gap-5 ps-5">
+                <% if(locals.products) { for(let i = 0 ; i < locals.products.length ; i++) { %>
+                    <% let desc = locals.products[i].description.split('.')[0] %>
+                    <% let pname = locals.products[i].productname.split(' ')[0] %>
+                        <div class="card my-4 col-md-3">
+                            <a href=""><img src="/public/image/<%= locals.products[i].mainimage %>" class="card-img-top" style="aspect-ratio:1/1;" alt="..."></a>
+                            <div class="card-body">
+                              <h5 class="card-title cardhead"><%= pname %></h5>
+                              <div class="carddesc"><p class="card-text"><%= desc %></p></div>
+                              <br>
+                              <div class="cardprice mb-4"><div><a href="/admin/editProduct?id=<%= locals.products[i]._id %>">Edit</a></div>
+                              <% if(locals.products[i].isListed === 0) { %>
+                                <div><button class="btn btn-sm btn-brand rounded font-sm mt-15 unlistbtn"  data-uid="<%= locals.products[i]._id%>">Unlist</button></div>
+                              <%} else { %>
+                                <div><button class="btn btn-sm btn-brand rounded font-sm mt-15 listbtn"  data-uid="<%= locals.products[i]._id%>">List</button></div>
+                              <% } %>
+                            </div>
+                              <% if(locals.products[i].stock === 0) { %>
+                                <div class="stockbadge1">Out of Stock</div>
+                            <% } else {%>
+                                <div class="stockbadge2">Stock : <%= locals.products[i].stock %></div>
+                            <% } %>
+                            </div>
+                            
+                        </div>
+                        <% } }else{ %>
+                            <h4>No Products to Show</h4>
+                        <% } %>
+                    </div>
+            <!-- </div>  -->
+        </div> <!-- card-body end// -->
+    </div> <!-- card end// -->
+    <div class="pagination-area mt-30 mb-50">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+                <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                <li class="page-item"><a class="page-link" href="#">02</a></li>
+                <li class="page-item"><a class="page-link" href="#">03</a></li>
+                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                <li class="page-item"><a class="page-link" href="#">16</a></li>
+                <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+            </ul>
+        </nav>
+    </div>
+</section>
+
+
+<script src="/public/js/listUnlistProduct.js"></script>
+
+
+<%- include('layout/footer.ejs') %>

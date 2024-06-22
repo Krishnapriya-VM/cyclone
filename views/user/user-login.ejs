@@ -8,28 +8,39 @@
                                 <div class="heading mb-1">
                                     <h3 class="title">Login</h3>
                                 </div>
-                            
+								<% if(locals.error_msg.length > 0){ locals.error_msg.forEach((err)=>{ %>
+									<p class="alert alert-danger"><%= err %></p>
+								<% }) } %>
+								<% if(locals?.message){ %>
+									<p class="alert alert-danger"><%= locals.message %></p>
+								<% } %>
                                 <form action="/user-login" method="post" id="loginForm">
                                     <label for="email">
                                         Email
                                         <span class="required">*</span>
                                     </label>
-                                    <input type="email" class="form-input form-wide" id="email" name="email" required />
+                                    <input type="email" class="form-input form-wide" id="email" name="email">
+
+									<p id="error1" style="color: red;"></p>
                             
                                     <label for="password">
                                         Password
                                         <span class="required">*</span>
                                     </label>
-                                    <input type="password" class="form-input form-wide" id="password" name="password" id="password"
-                                        required />
-                            
+                                    <input type="password" class="form-input form-wide" id="password" name="password" id="password">
+										<p id="error2" style=" color:red;"></p>
+
+										<div style="text-align: right;">
+											<a href="/reset-link" style="color: black; text-decoration: none;"><b>Forgot Password?</b></a>
+										</div>
+
                                     <div class="form-footer">
-                                        <button type="submit" class="btn btn-dark btn-md w-100 mr-0">
+                                        <button type="submit" style="font-size: 16px;" class="btn btn-dark btn-md w-100 mr-0">
                                             Login
                                         </button>
                                     </div>
                                 </form>
-								<br><br>
+								<br><br><br>
 								<p class="text-center small text-muted mb-2" style="margin-top: -50px; font-size: 16px;">OR</p>
 								<div class="d-grid gap-2 mb-4">
 									<a href="/google?from=LOGIN" class="btn w-100 btn-dark font-sm">
@@ -57,29 +68,31 @@
 
 	<script>
 		document.addEventListener('DOMContentLoaded', function(){
-			const form = document.getElementById('registerForm')
+			const form = document.getElementById('loginForm')
 
-			form.addEventListener('submit', function(event){
-				event.preventDefault();
+			// form.addEventListener('submit', function(event){
+			// 	event.preventDefault();
 				
-				const userName = document.getElementById('username').value.trim();
+			// 	const userName = document.getElementById('email').value.trim();
 
-				if(userName === '' || userName === null){
-					document.getElementById('userNameError').textContent = 'Field is required'
-					return false;
-				}
+			// 	if(userName === '' || userName === null){
+			// 		document.getElementById('userNameError').textContent = 'Field is required'
+			// 		return false;
+			// 	}
 
-			})
+			// })
 		})
 	</script>
 
 	<!-- Plugins JS File -->
-	<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="public/assets/js/jquery.min.js"></script>
-	<script src="public/assets/js/bootstrap.bundle.min.js"></script>
-	<script src="public/assets/js/plugins.min.js"></script>
+	<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+	<script src="/public/assets/js/jquery.min.js"></script>
+	<script src="/public/assets/js/bootstrap.bundle.min.js"></script>
+	<script src="/public/assets/js/plugins.min.js"></script>
 
 	<!-- Main JS File -->
-	<script src="public/assets/js/main.min.js"></script>
+	<script src="/public/assets/js/main.min.js"></script>
+	<script src="/public/js/loginValidation.js"></script>
 </body>
 
 </html>

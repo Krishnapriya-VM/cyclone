@@ -3,14 +3,14 @@
 <div class="container col-4 login_wrap widget-taber-content p-30 background-white border-radius-5 mt-30">
     <div class="padding_eight_all bg-white">
         <div class="heading_s1">
-            <h3 class="mb-30">Email Verification</h3>
+            <h3 class="mb-30">OTP Verification</h3>
         </div>
 
         <!-- Add your email verification modal content here -->
 
         <!-- Add OTP input field -->
         <div id="timer" class="text-muted text-center pt-10"></div>
-        <form action="/verify-otp" method="post">
+        <form action="/verify-otp" method="post" id="otpForm" >
             <div class="form-group">
                 <label for="otp">Enter OTP:</label>
                 <br>
@@ -18,20 +18,21 @@
             </div>
             <br>
             <!-- Add Verify Email button -->
-            <button type="submit" class="btn btn-primary">Verify Email</button>
+            <button type="submit" class="btn btn-primary">Verify OTP</button>
             <br>
             <!-- Add Resend OTP option -->
             <br>
             <div id="resend" style="display: none;">
-                <a href="#" id="resendLink" >Resend OTP</a>
+                <a href="#" id="resendLink">Resend OTP</a>
             </div>
             <br>
             <br>
-            <% if (locals.message&&message.length>0) { %>
+            <% if (locals.message && message.length > 0) { %>
                 <p class="text-danger">
                     <%= message %>
                 </p>
-                <% } %>
+            <% } %>
+            <p class="text-danger" id="errorMessageElement"></p>
         </form>
 
         <div class="text-muted text-center pt-25">
@@ -41,63 +42,131 @@
         <br>
     </div>
 </div>
+
 <script>
+    console.log("jbhkjbjbkjb");
+    document.addEventListener("DOMContentLoaded", function() {
+        var errorMessageElement = document.getElementById("errorMessageElement")
+        var timeLimit = 60;
+        var resendButton = document.getElementById("resend");
+        var resendLink = document.getElementById("resendLink");
+        var timerElement = document.getElementById("timer");
+        const otpForm = document.getElementById("otpForm")
+        var lastResendTime = localStorage.getItem("otpResendTime");
+        var timerInterval
+        function startTimer(timeLeft) {
+
+            timerElement.innerHTML = "Resend OTP in " + timeLeft + " seconds";
+             timerInterval = setInterval(function() {
+                timeLeft--;
+                localStorage.setItem('otpTime', timeLeft);
+                if (timeLeft < 0) {
+                    clearInterval(timerInterval);
+                    localStorage.removeItem('otpTime');
+                    resendButton.style.display = "block";
+                    timerElement.innerHTML = "";
+                } else {
+                    timerElement.innerHTML = "Resend OTP in " + timeLeft + " seconds";
+                }
+            }, 1000);
+        }
+
+        function initializeTimer() {
+            if (lastResendTime) {
+                var elapsedTime = Math.max(0, timeLimit - Math.floor((Date.now() - lastResendTime) / 1000));
+                if (elapsedTime === 0) {
+                    resendButton.style.display = "block";
+                } else {
+                    startTimer(elapsedTime);
+                }
+            } else {
+                resendButton.style.display = "none";
+            }
+        }
+
+        initializeTimer();
+        var times = localStorage.getItem('otpTime');
+        if (times && times > 0) {
+            startTimer(times);
+        } else {
+            startTimer(timeLimit);
+        }
+
+        // resendLink.addEventListener("click", function(event) {
+        //     console.log("resendOtp working");
+        //     var xhr = new XMLHttpRequest();
+        //     xhr.open("POST", "/verify-otp/resendOtp", true);
+        //     xhr.onreadystatechange = function() {
+        //         if (xhr.readyState == 4 && xhr.status == 200) {
+        //             localStorage.setItem("otpResendTime", Date.now());
+        //             resendButton.style.display = "none";
+        //             startTimer(timeLimit);
+        //         }
+        //     };
+        //     xhr.send();
+        //     event.preventDefault();
+        // });
+
+        resendLink.addEventListener("click", async function(event){
+            console.log("resendOtp working");
+            event.preventDefault();
+
+            try {
+                const response = await fetch("/verify-otp/resendOtp", {method: "POST"});
+                if(response.ok){
+                    localStorage.setItem("otpResendTime", Date.now());
+                    resendButton.style.display = "none";
+                    startTimer(timeLimit)
+                    errorMessageElement.innerHTML = ''
+                }else{
+                    console.error("Failed to resend OTP ", response.status);
+                }
+            } catch (error) {
+                console.error("Error confirming OTP: ", error);
+            }
+        });
+
+        async function removeLocal(){
+            return new Promise((resolve,reject)=>{
+                try {
+                    clearInterval(timerInterval)
+                    localStorage.removeItem('otpResendTime')
+                    localStorage.removeItem('otpTime')
+                    resolve(true)
+                } catch (error) {
+                    reject(error)
+                }
+            })
+        }
+
+        otpForm.addEventListener("submit", async function(event){
+            event.preventDefault();
+            const otp = document.getElementById("otp").value;
+            console.log(otp);
+            try {
+                const response = await fetch("/verify-otp", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ otp })
+                })
+                if (response.ok) {
+                   const removed = await removeLocal();
+                    window.location.href = "/";
+                } else {
+                const result = await response.json();
+                errorMessageElement.innerText = result.message || "Invalid OTP";
+                errorMessageElement.style.display = "block";
+                }
+            } catch (error) {
+                console.error("Error confirming OTP:", error);
+                errorMessageElement.innerText = "An error occurred. Please try again.";
+                errorMessageElement.style.display = "block";
+            }
+        })
 
 
-//     document.addEventListener("DOMContentLoaded", function() {
-//         var timeLimit = 60;
-//         var resendButton = document.getElementById("resend");
-//         var resendLink = document.getElementById("resendLink");
-//         var timerElement = document.getElementById("timer");
-//         var lastResendTime = localStorage.getItem("otpResendTime");
         
-//         function startTimer(timeLeft) {
-//             timerElement.innerHTML = "Resend OTP in " + timeLeft + " seconds";
-//             var timerInterval = setInterval(function() {
-//                 timeLeft--;
-//                 localStorage.setItem('otpTime', timeLeft);
-//                 if (timeLeft < 0) {
-//                     clearInterval(timerInterval);
-//                     resendButton.style.display = "block";
-//                     timerElement.innerHTML = "";
-//                 } else {
-//                     timerElement.innerHTML = "Resend OTP in " + timeLeft + " seconds";
-//                 }
-//             }, 1000);
-//         }
-        
-//         function initializeTimer() {
-//             if (lastResendTime) {
-//                 var elapsedTime = Math.max(0, timeLimit - Math.floor((Date.now() - lastResendTime) / 1000));
-//                 if (elapsedTime === 0) {
-//                     resendButton.style.display = "block";
-//                 } else {
-//                     startTimer(elapsedTime);
-//                 }
-//             } else {
-//                 resendButton.style.display = "none";
-//             }
-//         }
-
-//         initializeTimer();
-//         let times = localStorage.getItem('otpTime');
-//         startTimer(times ? times : timeLimit);
-        
-//         resendLink.addEventListener("click", function(event) {
-//             var xhr = new XMLHttpRequest();
-//             xhr.open("POST", "/verifyotp/resendOtp", true);
-//             xhr.onreadystatechange = function() {
-//                 if (xhr.readyState == 4 && xhr.status == 200) {
-//                     localStorage.setItem("otpResendTime", Date.now());
-//                     resendButton.style.display = "none";
-//                     startTimer(timeLimit);
-//                 }
-//             };
-//             xhr.send();
-//             event.preventDefault();
-//         });
-//     })
-
+    });
 </script>
 
 <%- include('layout/footer.ejs') %>

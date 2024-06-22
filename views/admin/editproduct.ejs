@@ -1,0 +1,103 @@
+<%- include ('layout/header.ejs') %>
+
+<section class="content-main 1">
+    <div class="row">
+        <div class="col-9">
+            <div class="content-header">
+                <h2 class="content-title">Edit Product</h2>
+                <form method="post" action="/admin/editProduct" id="addProductForm" enctype="multipart/form-data">
+                    <% if(locals.product) { %>
+                            <div>
+                                <button class="btn btn-md rounded font-sm hover-up" type="submit">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="mb-4">
+                                    <input type="hidden" name="id" class="form-control" value="<%= locals.product._id %>" >
+                                    <label for="productname" class="form-label">Product Name</label>
+                                    <input type="text" placeholder="Type here" class="form-control" id="productname" name="productname" value="<%= locals.product.productname %>">
+                                    <p class="perror mb-2" id="productNameError" style="display: none; color: red;"></p>
+                                </div>
+                                <div class="row gx-3">
+                                    <div class="col-md-4  mb-3">
+                                        <label for="stock" class="form-label">Stock</label>
+                                        <input type="number" placeholder="Type here" class="form-control" value="<%= locals.product.stock %>" id="stock" name="stock">
+                                        <p class="perror mb-2" id="stockerr" style="display: none; color: red;"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- card end// -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div>
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea placeholder="Type here" class="form-control" rows="4" id="description" name="description"><%= locals.product.description %></textarea>
+                                    <p class="perror mb-2" id="descError" style="display: none; color: red;"></p>
+                                </div>
+                            </div>
+                        </div> <!-- card end// -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div>
+                                    <label for="mainimage">Main Image</label>
+                                    <input type="file" id="mainimage" name="mainimage" class="form-control" >
+                                    <input type="hidden" id="cropvaluesmain" name="cropvaluesmain">
+                                    <br>                                    
+                                    <img src="/public/image/<%= locals.product.mainimage %>" alt="..." data-filename="<% locals.product.mainimage %>" style=" height: 80px; width: 80px;"> 
+                                    <p class="perror mb-2" id="error6" style="display: none; color: red;"></p>
+                                    <div class="preview1" id="preview1" ></div>
+                                    <br>
+                                    <label for="imgs"> Image</label>
+                                    <input type="file" id="imgs" name="imgs" class="form-control"  multiple>
+                                    <br>
+                                    <% for(let i=0; i< locals.product.image.length ; i++) { %>
+                                        <img src="/public/image/<%= locals.product.image[i] %>" alt="..." data-filename="<%= locals.product.image[i] %>" style=" height: 80px; width: 80px;"> 
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div> <!-- card end// -->
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="mb-4">
+                                    <label class="form-label">Price</label>
+                                    <input type="number" placeholder="Type here" class="form-control" value="<%= locals.product.price %>" id="price" name="price">
+                                    <p class="perror mb-2" id="priceError" style="display: none; color: red;"></p>
+                                </div>
+
+                                <div class="mb-4">
+                                    <select name="brandname" class="form-control" id="brandname">
+                                        <option value="<%= locals.product.brand_id._id %>"><%= locals.product.brand_id.brandname %></option>
+                                        <% if( locals.brand ) { for(let i = 0 ; i < locals.brand.length ; i ++) { %>
+                                            <% if( locals.product.brand_id.brandname !== locals.brand[i].brandname ) { %>
+                                        <option value="<%= locals.brand[i]._id %>"><%= locals.brand[i].brandname %></option>
+                                        <%} } } %>
+                                    </select>
+                                    <p class="perror mb-2" id="brandError" style="display: none;color: red;"></p>
+                                </div>
+
+                                <div class="mb-4">
+                                    <select name="procategory" class="form-control" id="procategory">
+                                        <option value="<%= locals.product.category_id._id %>"><%= locals.product.category_id.categoryname %></option>
+                                        <% if(locals.category) { for(let i = 0 ; i < locals.category.length ; i ++) { %>
+                                            <% if( locals.product.category_id.categoryname !== locals.category[i].categoryname ) {%>
+                                            <option value="<%= locals.category[i]._id %>"><%= locals.category[i].categoryname %></option>
+                                            <% } } } %>
+                                    </select>        
+                                    <p class="perror mb-2" id="catError" style="display: none; color: red;"></p>                                    
+                                </div>
+                            </div>
+                        </div> <!-- card end// -->
+                    </div>
+                    <% } %>
+                </form>
+    </div>
+</section>
+
+<script src="/public/js/product.js"></script>
+
+<%- include ('layout/footer.ejs') %>

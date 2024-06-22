@@ -5,6 +5,7 @@ const {decode} = require("jsonwebtoken");
 
 const isLoggedIn = async (req, res, next)=>{
     try {
+        console.log("loggin");
         if(req.cookies.token){
             const decodeToken = await jwt.verifyToken(req.cookies.token)
             if(decodeToken){
@@ -13,6 +14,7 @@ const isLoggedIn = async (req, res, next)=>{
                     isBlocked: 0
                 })
                 if(user === null){
+                    res.clearCookie("token")
                     res.redirect("/user-login")
                 }else{
                     req.user = user
@@ -32,17 +34,21 @@ const isLoggedIn = async (req, res, next)=>{
 
 const isLoggedOut = async (req, res, next)=>{
     try {
+        console.log("middleware");
+        console.log(req.cookies);
         if(req.cookies.token){
             const decodeToken = await jwt.verifyToken(req.cookies.token);
+            console.log(decodeToken);
             if(decodeToken){
                 const user = await User.findOne({
-                    _id: decodeToken.id,
-                    isBlocked: false
+                    _id: decodeToken._id,
+                    isBlocked: 0
                 });
+                console.log(user);
                 if(user === null){
                     next();
                 }else{
-                    req.userid = decoded.id;
+                    req.userid = decodeToken.id;
                     res.redirect('/')
                 }
             }else{
@@ -59,10 +65,11 @@ const isLoggedOut = async (req, res, next)=>{
 
 const isHome = async (req, res, next) => {
     try {
+        console.log("cookie",req.cookies);
         if (req.cookies.token) {
             const decodeToken = await jwt.verifyToken(req.cookies.token);
             if (decodeToken) {
-                const user = await User.findOne({ _id: decodeToken._id, isBlocked: false });
+                const user = await User.findOne({ _id: decodeToken._id, isBlocked: 0 });
                 if (user === null) {
                     next();
                 } else {

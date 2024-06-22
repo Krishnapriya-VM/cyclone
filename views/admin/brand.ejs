@@ -1,0 +1,102 @@
+<%- include('layout/header.ejs') %>
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Brands </h2>
+        </div>
+        <div>
+            <input type="text" placeholder="Search Brands" class="form-control bg-white">
+        </div>
+    </div>
+    <div class="card">
+        <% if(locals.message) { %>
+            <div class="error1 alert alert-danger w-75"><%= locals.message %></div>
+        <% } %>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <form method="post" id="brandform" action="/admin/brand" enctype="multipart/form-data">
+                        <div class="mb-4">
+                            <label for="brandName" class="form-label">Name</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="brand_name" name="brand_name">
+                            <p class="perror mb-2" id="error1" style="display: none; color: red;"></p>
+                        </div>
+                        <div class="mb-4">
+                            <label for="status" class="form-label">Status</label>
+                            <select name="status" class="form-control" id="status" name="status">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                                <div>
+                                    <label for="img1"> Image</label>
+                                    <input type="file" id="brand_image" name="brand_image" class="form-control" accept="image/*">
+                                    <br>
+                                    <div class="row col-md-4" >
+                                        <img id="imagePreview" src="#" alt="Preview" style="display: none;  max-width: 100px; max-height: 100px;">
+                                        <button id="closeButton" style="display: none; border:none; width:5px; color: red;">X</button>
+                                    </div>
+                                    <p class="perror mb-2" id="error2" style="display: none; color: red;"></p>
+                                </div>
+                        </div>
+                        <div class="d-grid">
+                            <button class="btn btn-primary">Create brand</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-9">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Listed</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <% if(locals.data && locals.data.length > 0) {  for(var i = 0; i < locals.data.length; i++) {%>
+                                    <tr>
+                                        <th><img src="/public/image/<%= locals.data[i].image %>" style="height: 50px; width: 50px;" ></th>
+                                        <th><%= locals.data[i].brandname %></th>
+                                        <% if(locals.data[i].isListed === 0) { %>
+                                            <td><span class="badge rounded-pill alert-success">Active</span></td>
+                                        <% }else{ %>
+                                            <td><span class="badge rounded-pill alert-danger">Inactive</span></td>
+                                            <% } %>
+
+                                        <% if(locals.data[i].isListed == 0) { %>
+                                            <td><span class="badge rounded-pill alert-success">Listed</span></td>
+                                        <% }else{ %>
+                                            <td><span class="badge rounded-pill alert-warning">Unlisted</span></td>
+                                        <% } %>
+
+                                        <td class="text-center">
+                                            <a href="/admin/editBrand?id=<%= locals.data[i]._id %>">
+                                            <button class="btn btn-sm btn-brand">Edit</button></a>
+                                                <% if(locals.data[i].isListed === 0) { %>
+                                                    <button class="btn btn-sm btn-brand rounded font-sm unlistbtn" data-uid="<%= locals.data[i]._id %>">Unlist</button>
+                                                <% }else { %>
+                                                    <button class="btn btn-sm btn-brand rounded font-sm listbtn" data-uid="<%= locals.data[i]._id %>">List</button>
+                                                <% } %>
+                                        </td>
+                                    </tr>
+                                <% } }else{  %>
+                                    <h2>No items found!!</h2>
+                                    <% } %>
+                            </thead>
+                        </table>
+                    </div>
+                </div> <!-- .col// -->
+            </div> <!-- .row // -->
+        </div> <!-- card body .// -->
+    </div> <!-- card .// -->
+</section> <!-- content-main end// -->
+
+
+<script src="/public/js/brand.js"></script>
+
+<%- include('layout/footer.ejs') %>

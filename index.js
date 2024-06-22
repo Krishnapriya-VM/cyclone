@@ -1,19 +1,29 @@
-const mongoose = require("mongoose");
-mongoose.connect("mongodb://127.0.0.1:27017/cyclones_Database");
+const express = require("express");
+require("dotenv").config()
+const connectDB = require('./configurations/config')
 const path = require("path");
 const session = require("express-session");
+const nocache = require('nocache')
 const cookieParser = require("cookie-parser")
-require("dotenv").config()
+const {usererrorHandler} = require('./middleware/usererrorHandler');
+const {adminerrorHandler} = require('./middleware/adminErrorHandler')
+
 require('./utils/passportConfig')
 const passport = require('passport')
+const flash = require('connect-flash')
 
-const express = require("express");
+const PORT = process.env.PORT || 3000;
+connectDB.connection();
+
 const app = express();
+
+app.use(nocache())
 
 app.set("view engine","ejs")
 
 app.use("/public",express.static(path.join(__dirname,"./public")))
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({extended:true}));
+app.use(express.json())
 app.use(session({
     secret: process.env.secret,
     resave: false,
@@ -21,16 +31,28 @@ app.use(session({
 }))
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 
 app.use(cookieParser())
+
+app.use((req, res, next) => {
+    // res.locals.success_msg = req.session.flash && req.session.flash.success_msg;
+    res.locals.error_msg = req.flash('error_msg');
+    next();
+});
 
 const adminRoute = require('./routes/adminRoutes')
 app.use('/admin', adminRoute)
 
+
+app.use(adminerrorHandler)
+
 const userRoute = require('./routes/userRoutes');
 app.use('/', userRoute)
 
+app.use(usererrorHandler);
 
-app.listen(5000, ()=>{
+
+app.listen(PORT, ()=>{
     console.log("Server is running.....")
 })

@@ -4,7 +4,7 @@ require("dotenv").config();
 const JWT_PASSWORD = process.env.JWT_PASS;
 
 const createToken = (user)=>{
-    return jwt.sign(user, JWT_PASSWORD, {expiresIn: '1h'})
+    return jwt.sign(user, JWT_PASSWORD, {expiresIn: '5h'})
 }
 
 const verifyToken = async(token)=>{

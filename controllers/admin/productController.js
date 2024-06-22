@@ -1,0 +1,180 @@
+const path = require("path");
+const fs = require("fs").promises;
+const Category = require("../../models/categoryModel")
+const Product = require("../../models/productModel");
+const Brand = require("../../models/brandModel")
+
+const viewProducts = async(req,res)=>{
+  try {
+    const product_data = await Product.find();
+    res.render('admin/viewproducts',{products: product_data})
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+const loadProducts = async(req, res) =>{
+    try {
+        const category_data = await Category.find({isListed: 0})
+        const brand_data = await Brand.find({isListed:0})
+        res.render("admin/product", { category: category_data, brand: brand_data})
+    } catch (error) {
+        res.status(500).render("error");
+    }
+}
+
+const addProducts = async(req, res) =>{
+    try {
+      const { productname, description, procategory, price, stock, brandname} = req.body;
+      console.log("FILES",req.files);
+      let protrim = productname.trim();
+      const isExist = await Product.find({ productname: protrim });
+      console.log(isExist);
+
+      if (isExist.length === 0) {
+        const main = req.files["mainimage"][0].filename;
+        let img = [];
+        req.files["imgs"].forEach((element) => {
+          img.push(element.filename);
+        });
+        console.log(main);
+        console.log(img);
+
+        const prodata = {
+          productname,
+          description,
+          brand_id: brandname,
+          category_id: procategory,
+          price,
+          mainimage: main,
+          image: img,
+          stock
+        };
+
+        console.log(prodata);
+
+        const prosaved = await Product.create(prodata);
+        if (prosaved != null) {
+          res.redirect("/admin/products");
+        } else {
+          console.log(prosaved);
+        }
+      } else {
+        const cdata = await Category.find({ status: 0 });
+        const bdata = await Brand.find({status:0})
+        res.render("admin/addproducts", {
+          err: "Product Already Exists.",
+          category: cdata,
+          brand: bdata
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+}
+
+const editProduct = async (req, res) => {
+
+  try {
+    const id = req.query.id
+    const prodata = await Product.findOne({ _id: id }).populate("category_id brand_id")
+    console.log(prodata);
+    const cdata = await Category.find({ status: 0 })
+    const bdata = await Brand.find({ status: 0 })
+    res.render('admin/editProduct', { product: prodata, category: cdata, brand: bdata })
+  } catch (error) {
+    console.log(error.message)
+  }
+
+}
+
+const postEditProduct = async (req, res) => {
+
+  try {
+    console.log(req.body);
+    const id = req.body.id
+    const { productname, stock, procategory, price, description, brandname } = req.body;
+    
+
+    let mainimage = '';
+    let imgs = [];
+
+    if (req.files.mainimage) {
+      mainimage = req.files.mainimage[0].filename;
+    }
+
+    if (req.files.imgs) {
+      req.files.imgs.forEach(file => {
+        imgs.push(file.filename);
+      });
+    }
+
+    console.log(req.files);
+    console.log("MAINIMAGE", mainimage);
+    console.log("IMAGES", imgs);
+
+    
+    if (mainimage.length !== 0 && imgs.length !== 0) {
+      await Product.updateOne({ _id: id }, { productname: productname, stock: stock, brand_id: brandname, category_id: procategory, description: description, mainimage: mainimage, image: imgs , price: price})
+    } else if (mainimage.length === 0 && imgs.length !== 0) {
+      await Product.updateOne({ _id: id }, { productname: productname, stock: stock, brand_id: brandname, category_id: procategory, description: description, image: imgs, price: price })
+    } else if (mainimage.length !== 0 && imgs.length === 0) {
+      await Product.updateOne({ _id: id }, { productname: productname, stock: stock, brand_id: brandname, category_id: procategory, description: description, mainimage: mainimage, price: price })
+    } else {
+      await Product.updateOne({ _id: id }, { productname: productname, stock: stock, brand_id: brandname, category_id: procategory, description: description, price: price })
+    }
+    res.redirect('/admin/products');
+  } catch (error) {
+    console.log(error.message)
+  }
+
+}
+
+const productListUnlist = async (req, res) => {
+
+  try {
+    const { id } = req.query
+    const state = await Product.findById({ _id: id })
+    if (state !== null) {
+      if (state.isListed === 0) {
+        const list = await Product.findOneAndUpdate(
+          { _id: id },
+          { $set: { isListed: 1 } },
+          { new: 0 }
+        )
+        if (list !== null) {
+          res.json({ unlist: "Product is listed" })
+        } else {
+          res.json({ err: "Error in unlisting" })
+        }
+      } else {
+        const unlist = await Product.findOneAndUpdate(
+          { _id: id },
+          { $set: { isListed: 0 } },
+          { new: 0 }
+        )
+        if (unlist !== null) {
+          res.json({ list: "Product is unlisted" })
+        } else {
+          res.json({ err: "Error in unlisting" })
+        }
+      }
+    } else {
+      console.log('No action performed')
+    }
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+
+
+
+module.exports = {
+    loadProducts,
+    addProducts,
+    editProduct,
+    postEditProduct,
+    productListUnlist,
+    viewProducts
+}
