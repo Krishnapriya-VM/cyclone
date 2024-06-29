@@ -27,6 +27,20 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    cart:{
+        type:[
+            {
+                product_id:{
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'product'
+                },
+                quantity:{
+                    type: Number
+                }
+            }
+        ],
+        default: []
+    },
     isBlocked:{
         type: Number,
         default: 0

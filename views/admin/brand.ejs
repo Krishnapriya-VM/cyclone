@@ -9,6 +9,7 @@
         </div>
     </div>
     <div class="card">
+        <p class="alert alert-success" id="success_mess" style="display: none;"></p>
         <% if(locals.message) { %>
             <div class="error1 alert alert-danger w-75"><%= locals.message %></div>
         <% } %>
@@ -85,7 +86,7 @@
                                         </td>
                                     </tr>
                                 <% } }else{  %>
-                                    <h2>No items found!!</h2>
+                                    <h2>No brands found!!</h2>
                                     <% } %>
                             </thead>
                         </table>

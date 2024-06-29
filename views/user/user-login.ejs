@@ -8,12 +8,10 @@
                                 <div class="heading mb-1">
                                     <h3 class="title">Login</h3>
                                 </div>
-								<% if(locals.error_msg.length > 0){ locals.error_msg.forEach((err)=>{ %>
-									<p class="alert alert-danger"><%= err %></p>
-								<% }) } %>
+
 								<% if(locals?.message){ %>
-									<p class="alert alert-danger"><%= locals.message %></p>
-								<% } %>
+									<p id="perror" class="alert alert-danger"><%= locals.message %></p>
+								<%  }  %>
                                 <form action="/user-login" method="post" id="loginForm">
                                     <label for="email">
                                         Email
@@ -67,21 +65,12 @@
 	<a id="scroll-top" href="#top" title="Top" role="button"><i class="icon-angle-up"></i></a>
 
 	<script>
-		document.addEventListener('DOMContentLoaded', function(){
-			const form = document.getElementById('loginForm')
+		if(document.getElementById('perror')){
+			setTimeout(() => {
+					document.getElementById('perror').style.display = 'none'
+				}, 3000);
+		}
 
-			// form.addEventListener('submit', function(event){
-			// 	event.preventDefault();
-				
-			// 	const userName = document.getElementById('email').value.trim();
-
-			// 	if(userName === '' || userName === null){
-			// 		document.getElementById('userNameError').textContent = 'Field is required'
-			// 		return false;
-			// 	}
-
-			// })
-		})
 	</script>
 
 	<!-- Plugins JS File -->

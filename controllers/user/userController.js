@@ -345,6 +345,36 @@ const loadProfile = async (req, res) =>{
   }
 }
 
+const editProfile = async (req, res) =>{
+  try {
+    const {fname,lname,mobile_number,password} = req.body
+    console.log(fname,lname,mobile_number,password)
+    const uid = req.userid
+    if(password === null){
+      const updated = await User.findOneAndUpdate({_id:uid},{fname:fname, lname:lname, mobile_no:mobile_number})
+      res.redirect("/user-profile")
+    }else{
+      const {npassword, confirm_password} = req.body
+      console.log(npassword, confirm_password);
+      const user = await User.findById({_id:uid})
+      const passtrue = await bcrypt.compare(password, user.password)
+      if(passtrue){
+        if(npassword === confirm_password){
+          const passwordHash = await securePassword(npassword);
+          const updated = await User.findOneAndUpdate({_id:uid},{fname:fname, lname:lname, mobile_no:mobile_number,password:passwordHash})
+          res.redirect("/user-profile")
+        }else{
+          res.render("user/user-profile",{error:"Password does not Match"})
+        }
+      }else{
+        res.render("user/user-profile",{error:"Enter Correct Password"})
+      }
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 const loadUser404Page = async (req, res) => {
   try {
     res.render("user/user404");
@@ -478,9 +508,21 @@ const viewProduct = async (req, res) => {
   try {
     const id = req.query.id
     const user = req.user
-    const product = await Product.findOne({ _id: id }).populate("category_id");
-    console.log(product);
+    const product = await Product.findOne({ _id: id }).populate("category_id brand_id");
     res.render('user/productDetails', { product, user })
+  } catch (error) {
+    console.log(error.message)
+  }
+
+}
+
+const viewShop = async (req, res) => {
+
+  try {
+    const id = req.query.id
+    const user = req.user
+    const product = await Product.find({}).populate("category_id brand_id");
+    res.render('user/shop', { product, user })
   } catch (error) {
     console.log(error.message)
   }
@@ -509,5 +551,7 @@ module.exports = {
   loadResetOtp,
   resentResetOtp,
   postResetOtp,
-  viewProduct
+  viewProduct,
+  viewShop,
+  editProfile
 };

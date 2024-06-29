@@ -10,7 +10,6 @@ const {adminerrorHandler} = require('./middleware/adminErrorHandler')
 
 require('./utils/passportConfig')
 const passport = require('passport')
-const flash = require('connect-flash')
 
 const PORT = process.env.PORT || 3000;
 connectDB.connection();
@@ -31,15 +30,8 @@ app.use(session({
 }))
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash());
 
 app.use(cookieParser())
-
-app.use((req, res, next) => {
-    // res.locals.success_msg = req.session.flash && req.session.flash.success_msg;
-    res.locals.error_msg = req.flash('error_msg');
-    next();
-});
 
 const adminRoute = require('./routes/adminRoutes')
 app.use('/admin', adminRoute)

@@ -27,7 +27,7 @@
         </header> <!-- card-header end// -->
         <div class="card-body">
                 <div class="row product d-flex  gap-5 ps-5">
-                <% if(locals.products) { for(let i = 0 ; i < locals.products.length ; i++) { %>
+                <% if(locals.products && locals.products.length > 0) { for(let i = 0 ; i < locals.products.length ; i++) { %>
                     <% let desc = locals.products[i].description.split('.')[0] %>
                     <% let pname = locals.products[i].productname.split(' ')[0] %>
                         <div class="card my-4 col-md-3">
@@ -52,7 +52,7 @@
                             
                         </div>
                         <% } }else{ %>
-                            <h4>No Products to Show</h4>
+                            <h4>No Products Found!!</h4>
                         <% } %>
                     </div>
             <!-- </div>  -->

@@ -28,10 +28,11 @@ const addProducts = async(req, res) =>{
       const { productname, description, procategory, price, stock, brandname} = req.body;
       console.log("FILES",req.files);
       let protrim = productname.trim();
-      const isExist = await Product.find({ productname: protrim });
+      const isExist = await Product.findOne({ 
+        productname: new RegExp(protrim, 'i' )});
       console.log(isExist);
 
-      if (isExist.length === 0) {
+      if (!isExist) {
         const main = req.files["mainimage"][0].filename;
         let img = [];
         req.files["imgs"].forEach((element) => {
@@ -55,14 +56,16 @@ const addProducts = async(req, res) =>{
 
         const prosaved = await Product.create(prodata);
         if (prosaved != null) {
-          res.redirect("/admin/products");
+          //res.redirect("/admin/products");
+          return res.status(200).json({ message: 'Product Added!' });
         } else {
           console.log(prosaved);
+          return res.status(500).json({ error: 'Product could not be saved' });
         }
       } else {
         const cdata = await Category.find({ status: 0 });
         const bdata = await Brand.find({status:0})
-        res.render("admin/addproducts", {
+        res.status(400).json({
           err: "Product Already Exists.",
           category: cdata,
           brand: bdata
@@ -70,6 +73,7 @@ const addProducts = async(req, res) =>{
       }
     } catch (error) {
       console.log(error);
+      res.status(500).json({error: message})
     }
 }
 
@@ -79,8 +83,8 @@ const editProduct = async (req, res) => {
     const id = req.query.id
     const prodata = await Product.findOne({ _id: id }).populate("category_id brand_id")
     console.log(prodata);
-    const cdata = await Category.find({ status: 0 })
-    const bdata = await Brand.find({ status: 0 })
+    const cdata = await Category.find({})
+    const bdata = await Brand.find({})
     res.render('admin/editProduct', { product: prodata, category: cdata, brand: bdata })
   } catch (error) {
     console.log(error.message)

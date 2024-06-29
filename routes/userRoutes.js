@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const userController = require("../controllers/user/userController");
+const cartController = require("../controllers/user/cartController")
 const userAuth = require("../middleware/userAuth");
 const userModel = require("../models/userModel");
 const passport = require("passport");
@@ -13,7 +14,7 @@ router.get("/success", userAuth.isLoggedOut, passport.authenticate("google", { f
 router.get("/", userAuth.isHome, userController.loadHomePage);
 router.get("/user-profile",userAuth.isLoggedIn, userController.loadProfile);
 router.get("/user-details", userAuth.isLoggedIn, userController.getProfile);
-
+router.post("/edit-user-details",userAuth.isLoggedIn, userController.editProfile);
 
 
 router.get("/user-login", userAuth.isLoggedOut, userController.loadUserLogin);
@@ -36,7 +37,13 @@ router.get("/user-otp", userAuth.isLoggedOut, userController.loadUserOtp);
 router.post("/verify-otp", userAuth.isLoggedOut, userController.confirmUserOtp);
 router.post("/verify-otp/resendOtp", userAuth.isLoggedOut, userController.resendOtp );
 
-router.get("/productdetails", userAuth.isLoggedOut, userController.viewProduct)
+router.get("/productdetails", userAuth.isHome, userController.viewProduct)
+
+router.get("/shop", userAuth.isHome, userController.viewShop)
+
+router.get("/cart", userAuth.isLoggedIn, cartController.viewCart)
+router.get("/addToCart", userAuth.isLoggedIn, cartController.addToCart);
+router.get("/cart/increment-quantity", userAuth.isLoggedIn)
 
 router.get("/logout",userAuth.isLoggedIn, userController.logOut);
 

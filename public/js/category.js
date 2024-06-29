@@ -1,5 +1,6 @@
 const catname = document.getElementById('category_name')
 const catimage = document.getElementById('catimage')
+const status = document.getElementById('status')
 const catform = document.getElementById('catform')
 const error1 = document.getElementById('error1')
 const error2 = document.getElementById('error2')
@@ -49,7 +50,34 @@ catimage.addEventListener('change',()=>{
     imageValidate(imagedata)
 })
 
+
+async function addCategory(namedata, imagedata,status){
+    try {
+        const formdata = new FormData()
+        formdata.append('category_name',namedata)
+        formdata.append('catimage',imagedata)
+        formdata.append('status',status)
+        console.log(namedata, imagedata);
+        const res = await fetch('/admin/category', {
+            method: 'POST',
+            body: formdata
+        })
+        const data = await res.json()
+        console.log(data);
+        if(data.message){
+            document.getElementById('success_mess').style.display = 'block'
+            document.getElementById('success_mess').innerHTML = data.message;
+            setTimeout(()=>{
+                window.location.href = '/admin/category'
+            },1000)
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}   
+
 catform.addEventListener('submit',(e)=>{
+    e.preventDefault()
 
     const namedata = catname.value
     const imagedata = catimage.files
@@ -57,9 +85,12 @@ catform.addEventListener('submit',(e)=>{
     imageValidate(imagedata)
     formValidation(namedata)
 
-    if(error1.innerHTML !== "" || error2.innerHTML !== "" )
+    if(error1.innerHTML === "" || error2.innerHTML === "" )
     {
-        e.preventDefault()
+        console.log("ADDd");
+        const statusdata = status.value
+        console.log(statusdata);
+        addCategory(namedata, imagedata[0], statusdata)
     }
 });
 
@@ -99,8 +130,6 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.error('File input element not found');
     }
-
-
 
 });
 

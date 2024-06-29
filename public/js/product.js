@@ -45,11 +45,15 @@ function catval(name)
     }
 }
 
-function brandVal(name){
-    if(name.trim() === ""){
+function brandVal(name)
+{
+    console.log(name);
+    if(name.trim() === "")
+        {
         brandError.innerHTML = "Please select brand!";
         brandError.style.display = "block";
-    }else{
+    }
+    else{
         brandError.innerHTML = ""
         brandError.style.display = "none"
     }
@@ -161,22 +165,18 @@ productname.addEventListener('keyup',()=>{
     const fdata = productname.value
     pname(fdata)
 })
+
 productname.addEventListener('blur',()=>{
     const fdata = productname.value
     pname(fdata)
 })
 
-
-procategory.addEventListener('keyup',()=>{
-    const fdata = procategory.value
-    catval(fdata)
-})
-procategory.addEventListener('blur',()=>{
+procategory.addEventListener('change',()=>{
     const fdata = procategory.value
     catval(fdata)
 })
 
-brandname.addEventListener('keyup', () => {
+brandname.addEventListener('change', () => {
     const fdata = brandname.value;
     brandVal(fdata);
 })
@@ -227,10 +227,45 @@ main.addEventListener('change',()=>{
          mmtype = main.files[0].type
     }
     mainval(mdata,mmtype)
-})  
+}) 
+
+async function addProduct(pdata, ddata, catdata, bdata, prdata, sdata){
+    try {
+        const mdata = main.files[0];
+        const idata = imgs.files;
+        const formdata = new FormData()
+        formdata.append('productname', pdata);
+        formdata.append('procategory', catdata);
+        formdata.append('brandname', bdata)
+        formdata.append('description', ddata)
+        formdata.append('stock', sdata)
+        formdata.append('price', prdata)
+        formdata.append('mainimage', mdata)
+            Array.from(idata).forEach(image =>{
+            formdata.append('imgs', image)
+        })
+        const res = await fetch('/admin/addproducts', {
+            method: 'POST',
+            body: formdata
+        })
+        const data = await res.json();
+        console.log(data);
+        if(data.message){
+            document.getElementById('success_mess').style.display = 'block';
+            document.getElementById('success_mess').innerHTML = data.message;
+            setTimeout(()=>{
+                window.location.href = '/admin/products'
+            }, 1000)
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 addProductForm.addEventListener('submit',(e)=>{
+    e.preventDefault()
+
     const pdata = productname.value
     const ddata = description.value
     const catdata = procategory.value
@@ -252,9 +287,10 @@ addProductForm.addEventListener('submit',(e)=>{
     descVal(ddata)
     brandVal(bdata)
 
-    if(productNameError.innerHTML !== "" || brandError.innerHTML !== "" || descError.innerHTML !=="" || error6.innerHTML !=="" || error7.innerHTML !==""|| priceError.innerHTML !==""|| catError.innerHTML !==""|| stockerr.innerHTML !=="" )
+    if(productNameError.innerHTML === "" || brandError.innerHTML === "" || descError.innerHTML ==="" || error6.innerHTML ==="" || error7.innerHTML ===""|| priceError.innerHTML ===""|| catError.innerHTML ===""|| stockerr.innerHTML ==="" )
     {
-        e.preventDefault()
+        console.log("PRO");
+        addProduct(pdata, ddata, catdata, bdata, prdata, sdata)
     }
 })
 

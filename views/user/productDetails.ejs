@@ -104,7 +104,10 @@
 
                         <a href="wishlist.html" class="header-icon" title="wishlist"><i class="icon-wishlist-2"></i></a>
 
-                        <div class="dropdown cart-dropdown">
+                        <a href="cart" class="header-icon" title="cart"><i class="minicart-icon"></i></a>
+
+
+                        <!-- <div class="dropdown cart-dropdown">
                             <a href="#" title="Cart" class="dropdown-toggle cart-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                 <i class="minicart-icon"></i>
                                 <span class="cart-count badge-circle">3</span>
@@ -117,7 +120,7 @@
 
                                 <div class="dropdownmenu-wrapper custom-scrollbar">
                                     <div class="dropdown-cart-header">Shopping Cart</div>
-                                    <!-- End .dropdown-cart-header -->
+                                    
 
                                     <div class="dropdown-cart-products">
                                         <div class="product">
@@ -130,7 +133,7 @@
 													<span class="cart-product-qty">1</span> × $99.00
                                                 </span>
                                             </div>
-                                            <!-- End .product-details -->
+                                            
 
                                             <figure class="product-image-container">
                                                 <a href="product.html" class="product-image">
@@ -140,7 +143,7 @@
                                                 <a href="#" class="btn-remove" title="Remove Product"><span>×</span></a>
                                             </figure>
                                         </div>
-                                        <!-- End .product -->
+                                        
 
                                         <div class="product">
                                             <div class="product-details">
@@ -152,7 +155,7 @@
 													<span class="cart-product-qty">1</span> × $35.00
                                                 </span>
                                             </div>
-                                            <!-- End .product-details -->
+                                           
 
                                             <figure class="product-image-container">
                                                 <a href="product.html" class="product-image">
@@ -162,7 +165,7 @@
                                                 <a href="#" class="btn-remove" title="Remove Product"><span>×</span></a>
                                             </figure>
                                         </div>
-                                        <!-- End .product -->
+                                        
 
                                         <div class="product">
                                             <div class="product-details">
@@ -174,7 +177,7 @@
 													<span class="cart-product-qty">1</span> × $35.00
                                                 </span>
                                             </div>
-                                            <!-- End .product-details -->
+                                           
 
                                             <figure class="product-image-container">
                                                 <a href="product.html" class="product-image">
@@ -183,28 +186,28 @@
                                                 <a href="#" class="btn-remove" title="Remove Product"><span>×</span></a>
                                             </figure>
                                         </div>
-                                        <!-- End .product -->
+                                        
                                     </div>
-                                    <!-- End .cart-product -->
+                                    
 
                                     <div class="dropdown-cart-total">
                                         <span>SUBTOTAL:</span>
 
                                         <span class="cart-total-price float-right">$134.00</span>
                                     </div>
-                                    <!-- End .dropdown-cart-total -->
+                                    
 
                                     <div class="dropdown-cart-action">
                                         <a href="cart.html" class="btn btn-gray btn-block view-cart">View
 											Cart</a>
                                         <a href="checkout.html" class="btn btn-dark btn-block">Checkout</a>
                                     </div>
-                                    <!-- End .dropdown-cart-total -->
+                                    
                                 </div>
-                                <!-- End .dropdownmenu-wrapper -->
-                            </div>
-                            <!-- End .dropdown-menu -->
-                        </div>
+                                
+                            </div> -->
+                           
+                        <!-- </div> -->
                         <!-- End .dropdown -->
                     </div>
                     <!-- End .header-right -->
@@ -490,6 +493,10 @@
                                     CATEGORY: <strong><a href="#" class="product-category"><%= locals.product.category_id.categoryname %></a></strong>
                                 </li>
 
+                                <li>
+                                    BRAND: <strong><a href="#" class="product-brand"><%= locals.product.brand_id.brandname %></a></strong>
+                                </li>
+
                                 <!-- <li>
                                     TAGs: <strong><a href="#" class="product-category">CLOTHES</a></strong>,
                                     <strong><a href="#" class="product-category">SWEATER</a></strong>
@@ -498,14 +505,12 @@
 
                             <div class="product-action">
                                 <div class="product-single-qty">
-                                    <input class="horizontal-quantity form-control" type="text">
+                                    <input class="horizontal-quantity form-control" id="qty" type="text">
                                 </div>
                                 <!-- End .product-single-qty -->
 
-                                <a href="javascript:;" class="btn btn-dark add-cart mr-2" title="Add to Cart">Add to
-									Cart</a>
+                                <button class="btn btn-dark add-cart mr-2" id="addToCart" data-productid="<%= locals.product._id %>">Add To Cart</button>
 
-                                <a href="cart.html" class="btn btn-gray view-cart d-none">View cart</a>
                             </div>
                             <!-- End .product-action -->
 
@@ -772,5 +777,7 @@
             <!-- End .container -->
         </main>
         <!-- End .main -->
+
+<script src="/public/js/productToCart.js"
 
 <%- include("layout/footer.ejs") %>        

@@ -1,4 +1,3 @@
-
 const unlistbtn = document.querySelectorAll('.unlistbtn');
 const listbtn = document.querySelectorAll('.listbtn');
 
@@ -41,10 +40,24 @@ if (unlistbtn) {
         btn.addEventListener('click', () => {
             const id = btn.dataset.uid;
             console.log(id);
-            const confirmResult = confirm("Are you sure you want to list this product?");
-            if (confirmResult) {
-                unlist(id);
-            }
+            Swal.fire({
+                title: 'Are you sure!',
+                text: 'You want to unlist this product',
+                timer: 30000,
+                confirmCancelButton: true,
+                confirmCancelButton: 'Cancel',
+                confirmButtonText: 'Ok'
+            })
+            .then((result) =>{
+                if (result.isConfirmed) {
+                    unlist(id);
+                }
+            })
+
+            // const confirmResult = confirm("Are you sure you want to list this product?");
+            // if (confirmResult) {
+            //     unlist(id);
+            // }
         });
     });
 }
@@ -54,11 +67,20 @@ if (listbtn) {
         btn.addEventListener('click', () => {
             const id = btn.dataset.uid;
             console.log(id);
-            const confirmResult = confirm("Are you sure you want to unlist this product?");
-            console.log(confirmResult);
-            if (confirmResult) {
-                list(id);
-            }
+
+            Swal.fire({
+                title: 'Are you sure!',
+                text: 'You want to list this product',
+                timer: 30000,
+                confirmCancelButton: true,
+                confirmCancelButton: 'Cancel',
+                confirmButtonText: 'Ok'
+            })
+            .then((result) =>{
+                if (result.isConfirmed) {
+                    list(id);
+                }
+            })
         });
     });
 }

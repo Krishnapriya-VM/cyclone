@@ -26,6 +26,30 @@ email.addEventListener('blur', () =>{
     emailForgot(emailData);
 })
 
+async function acceptEmail(mail){
+    try {
+        console.log(mail);
+        const res = await fetch('/reset-link',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({mail})
+        })
+        const data = await res.json()
+        console.log(data);
+        if(data.message){
+            document.getElementById('success_mess').innerHTML = data.message;
+            setTimeout(()=>{
+                window.location.href = '/reset-otp'
+            },3000)
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
 forgotForm.addEventListener('submit', (event) =>{
 
     const emailData = email.value;
@@ -34,38 +58,11 @@ forgotForm.addEventListener('submit', (event) =>{
 
     if(error1.innerHTML !== ""){
         event.preventDefault();
+    }else{
+        acceptEmail(emailData)
     }
 })
 
 
-        async function acceptEmail(mail){
-            try {
-                console.log(mail);
-                const res = await fetch('/reset-link',{
-                    method:'POST',
-                    headers:{
-                        'Content-Type':'application/json'
-                    },
-                    body:JSON.stringify({mail})
-                })
-                const data = await res.json()
-                console.log(data);
-                if(data.message){
-                    document.getElementById('success_mess').innerHTML = data.message;
-                    setTimeout(()=>{
-                        window.location.href = '/reset-otp'
-                    },3000)
-                }
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
-
-        forgotForm.addEventListener('submit',(e)=>{
-            e.preventDefault()
-            console.log(email.value);
-            acceptEmail(email.value)
-        })
-
-
         
+   

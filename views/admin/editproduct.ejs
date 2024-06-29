@@ -1,6 +1,10 @@
 <%- include ('layout/header.ejs') %>
 
 <section class="content-main 1">
+    <p class="alert alert-success" id="success_mess" style="display: none;"></p>
+    <% if(locals.message) { %>
+        <div class="error1 alert alert-danger w-75"><%= locals.message  %></div>
+    <% } %>
     <div class="row">
         <div class="col-9">
             <div class="content-header">
@@ -47,6 +51,7 @@
                                     <input type="hidden" id="cropvaluesmain" name="cropvaluesmain">
                                     <br>                                    
                                     <img src="/public/image/<%= locals.product.mainimage %>" alt="..." data-filename="<% locals.product.mainimage %>" style=" height: 80px; width: 80px;"> 
+                                    <div class="row mb-2" id="imagePreview"></div>
                                     <p class="perror mb-2" id="error6" style="display: none; color: red;"></p>
                                     <div class="preview1" id="preview1" ></div>
                                     <br>
@@ -56,6 +61,8 @@
                                     <% for(let i=0; i< locals.product.image.length ; i++) { %>
                                         <img src="/public/image/<%= locals.product.image[i] %>" alt="..." data-filename="<%= locals.product.image[i] %>" style=" height: 80px; width: 80px;"> 
                                     <% } %>
+                                    <div class="row mb-8" id="imagePreviews"></div>
+                                    <p class="perror mb-2" id="error7" style="display: none; color: red;"></p>
                                 </div>
                             </div>
                         </div> <!-- card end// -->
@@ -70,9 +77,11 @@
                                 </div>
 
                                 <div class="mb-4">
+                                    <label for="brandname" class="form-label">Brand</label>
                                     <select name="brandname" class="form-control" id="brandname">
+                                        <% if( locals.brand ) { %>
                                         <option value="<%= locals.product.brand_id._id %>"><%= locals.product.brand_id.brandname %></option>
-                                        <% if( locals.brand ) { for(let i = 0 ; i < locals.brand.length ; i ++) { %>
+                                        <% for(let i = 0 ; i < locals.brand.length ; i ++) { %>
                                             <% if( locals.product.brand_id.brandname !== locals.brand[i].brandname ) { %>
                                         <option value="<%= locals.brand[i]._id %>"><%= locals.brand[i].brandname %></option>
                                         <%} } } %>
@@ -81,6 +90,7 @@
                                 </div>
 
                                 <div class="mb-4">
+                                    <label for="procategory" class="form-label">Category</label>
                                     <select name="procategory" class="form-control" id="procategory">
                                         <option value="<%= locals.product.category_id._id %>"><%= locals.product.category_id.categoryname %></option>
                                         <% if(locals.category) { for(let i = 0 ; i < locals.category.length ; i ++) { %>

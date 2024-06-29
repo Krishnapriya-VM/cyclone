@@ -1,5 +1,6 @@
 const bname = document.getElementById('brand_name')
 const bimage = document.getElementById('brand_image')
+const status = document.getElementById('status')
 const brandform = document.getElementById('brandform')
 const error1 = document.getElementById('error1')
 const error2 = document.getElementById('error2')
@@ -49,21 +50,51 @@ bimage.addEventListener('change',()=>{
     imageValidate(imagedata)
 })
 
+async function addBrand(namedata, imagedata, status){
+    try {
+        const formdata = new FormData();
+        formdata.append('brand_name', namedata)
+        formdata.append('brand_image', imagedata)
+        formdata.append('status', status)
+        console.log(namedata, imagedata);
+
+        const res = await fetch('/admin/brand', {
+            method: 'POST',
+            body: formdata
+        })
+        const data = await res.json()
+        console.log(data);
+        if(data.message){
+            document.getElementById('success_mess').style.display = 'block'
+            document.getElementById('success_mess').innerHTML = data.message;
+            setTimeout(() =>{
+                window.location.href = '/admin/brand'
+            }, 1000)
+        }
+    } catch (error) {
+      console.log(error.message);  
+    }
+}
 
 brandform.addEventListener('submit', (e) => {
+    e.preventDefault();
+
     const namedata = bname.value;
     const imagedata = bimage.files;
 
     formValidation(namedata);
     imageValidate(imagedata);
 
-    if (error1.innerHTML !== "" || error2.innerHTML !== "") {
-        e.preventDefault();
+    if (error1.innerHTML === "" || error2.innerHTML === "") {
+        console.log('ADDED BRAND');
+        const statusdata = status.value;
+        console.log(statusdata);
+        addBrand(namedata, imagedata[0], statusdata)
     }
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    const brandimageInput = document.getElementById('bimage');
+    const brandimageInput = document.getElementById('brand_image');
     const imagePreview = document.getElementById('imagePreview');
     const closeButton = document.getElementById('closeButton');
 

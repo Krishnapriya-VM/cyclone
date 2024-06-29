@@ -33,13 +33,15 @@ const addCategory = async (req, res) => {
     if (categoryExist === null ) {
       const category_data = await Category.create(data);
       if (category_data != null) {
-        res.redirect("/admin/category");
+        //res.redirect("/admin/category");
+        
+        return res.status(200).json({message:'Category Added!'});
       }
     } else {
       const category_details = await Category.find({ isListed: 0 });
-      res.render("admin/category", {
+      res.status(400).json({
         data: category_details,
-        message: "Category Already Exist!!",
+        error: "Category Already Exist!!",
       });
     }
   } catch (error) {

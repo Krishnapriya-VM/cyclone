@@ -35,11 +35,12 @@ const addBrand = async (req, res)=>{
         if(brandExist === null){
             const brand_data = await Brand.create(data);
             if(brand_data != null){
-                res.redirect("/admin/brand")
+                //res.redirect("/admin/brand")
+                return res.status(200).json({message: 'Brand Added!'})
             }
         }else{
             const brand_details = await Brand.find({ isListed: 0});
-            res.render("admin/brand", {
+            res.staus(400).json({
                 data: brand_details,
                 message: "Brand Already Exist!!"
             })
