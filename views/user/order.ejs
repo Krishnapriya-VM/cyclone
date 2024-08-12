@@ -1,0 +1,47 @@
+<%- include("layout/header1.ejs") %>
+<div class="custom-order-success-container">
+    <div class="custom-success-icon">
+        ✓
+    </div>
+    <h1>Thank You for Your Order!</h1>
+    <p>Your order has been successfully placed.</p>
+
+    <div class="custom-order-details">
+        <div class="custom-product-details">
+            <h4>Product Details</h4>
+            <% orderdata.products.forEach(product => { %>
+            <div class="custom-product-item">
+                <img src="/public/image/<%= product.image %>" alt="Product Image">
+                <div class="d-flex flex-column align-items-start">
+                    <p ><b>Name</b>:<%= product.product_id.productname  %></p>
+                    <p><b>Quantity</b>: <%= product.quantity %></p>
+                    <p><b>Price</b>: <%= product.price %></p>
+                </div>
+            </div>
+            <% }) %>
+            <div class="custom-subtotal-box">
+                <h3>Subtotal: <%= orderdata.total_amount %></h3>
+            </div>
+        </div>
+        <div class="custom-shipping-details">
+            <h4>Order Details</h4>
+            <p><b>Order ID</b>: <%= orderdata._id %></p>
+            <p><b>Total</b>: <%= orderdata.total_amount %></p>
+            <p><b>Date</b>: <%= orderdata.date.toDateString() %></p>
+            <p><b>Shipping Address</b>:</p>
+            <p>
+                <%= orderdata.address_id.fname %> <%= orderdata.address_id.lname %><br>
+                <%= orderdata.address_id.houseno %>, <%= orderdata.address_id.street_address %><br>
+                <%= orderdata.address_id.landmark %>, <%= orderdata.address_id.town %><br>
+                <%= orderdata.address_id.district %>, <%= orderdata.address_id.state %><br>
+                <%= orderdata.address_id.country %> - <%= orderdata.address_id.pincode %><br>
+                <b>Mobile</b>: <%= orderdata.address_id.mobile %>
+            </p>
+            <p><b>Payment Method</b>: <%= orderdata.payment_method %></p>
+        </div>
+    </div>
+
+    <button class="btn btn-primary custom-continue-shopping" onclick="window.location.href='/shop'">CONTINUE SHOPPING</button>
+</div>
+
+<%- include("layout/footer.ejs") %>

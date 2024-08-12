@@ -130,24 +130,7 @@ const loadHomePage = async (req, res) => {
   } catch (error) {
     console.log(error.message)
   }
-  // try {
-
-  //   const userid = req.userid 
-  //   res.render("user/home-page",{userid});
-  // } catch (error) {
-  //   console.log(error.message);
-  // }
 };
-
-const getProfile = async (req, res) =>{
-  try {
-    id = req.userid;
-    const user = await User.findById(id);
-    res.render('user/user-profile', {user})
-  } catch (error) {
-    console.log(error.message);
-  }
-}
 
 
 
@@ -177,7 +160,7 @@ const registerUser = async (req, res) => {
           req.session.userOtp = otp;
           console.log(req.session.userOtp);
 
-          setTimeout(() => {
+          setTimeout(() => {  
             req.session.userOtp = null;
             req.session.save();
           }, 60000);
@@ -192,7 +175,7 @@ const registerUser = async (req, res) => {
       } else {
         console.log("User already exist!!");
         res.render("user/user-register", {
-          message: "User with this email already exist",
+          message: "User Already Exist!!",
         });
       }
     } else {
@@ -265,7 +248,7 @@ const resendOtp = async (req, res) =>{
     console.log("MESSAGE: ", message);
 
     if (message) {
-
+ 
       console.log("entered");
       console.log(newOtp, "newOtp")
       req.session.userOtp = newOtp;
@@ -335,11 +318,22 @@ const logOut = async (req, res)=>{
   }
 }
 
+// const getProfile = async (req, res) =>{
+//   try {
+//     id = req.userid;
+//     const user = await User.findById(id);
+//     res.render('user/user-profile', {user})
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// }
+
 const loadProfile = async (req, res) =>{
   try {
     const userid = req.userid
-    const user = req.user
-    res.render("user/user-profile",{user,userid})
+    const user = await User.findById(userid);
+    console.log(user);
+    res.render("user/user-profile", {user})
   } catch (error) {
     console.log(error.message);
   }
@@ -347,29 +341,18 @@ const loadProfile = async (req, res) =>{
 
 const editProfile = async (req, res) =>{
   try {
-    const {fname,lname,mobile_number,password} = req.body
-    console.log(fname,lname,mobile_number,password)
+    const {fname,lname,mobile_number} = req.body
+    console.log(fname,lname,mobile_number)
     const uid = req.userid
-    if(password === null){
-      const updated = await User.findOneAndUpdate({_id:uid},{fname:fname, lname:lname, mobile_no:mobile_number})
-      res.redirect("/user-profile")
-    }else{
-      const {npassword, confirm_password} = req.body
-      console.log(npassword, confirm_password);
-      const user = await User.findById({_id:uid})
-      const passtrue = await bcrypt.compare(password, user.password)
-      if(passtrue){
-        if(npassword === confirm_password){
-          const passwordHash = await securePassword(npassword);
-          const updated = await User.findOneAndUpdate({_id:uid},{fname:fname, lname:lname, mobile_no:mobile_number,password:passwordHash})
-          res.redirect("/user-profile")
-        }else{
-          res.render("user/user-profile",{error:"Password does not Match"})
-        }
+    const updated = await User.findOneAndUpdate(
+      {_id: uid},
+      {fname:fname, lname:lname, mobile_no: mobile_number},
+      {new: true})
+      if(updated){
+        res.redirect("/user-profile")
       }else{
-        res.render("user/user-profile",{error:"Enter Correct Password"})
-      }
-    }
+          res.render("user/user-profile", {error:"Failed to update profile"} )
+        }
   } catch (error) {
     console.log(error.message);
   }
@@ -419,20 +402,12 @@ const postReset = async (req, res) =>{
         return res.status(400).json({error:'OTP send error.'});
       }
     }else{
-      return res.status(400).json({error:'NO USER EXISTS!'});
+      return res.status(400).json({error:'NO SUCH USER EXISTS!'});
     }
   } catch (error) {
     console.log(error.message);
   }
 }
-
-const loadForgotPassword = async (req, res) => {
-  try {
-    res.render("user/forgot-password")
-  } catch (error) {
-    console.error(error.message);
-  }
-};
 
 const resentResetOtp = async (req,res)=>{
   try {
@@ -485,6 +460,14 @@ const postResetOtp = async (req,res) => {
   }
 }
 
+const loadForgotPassword = async (req, res) => {
+  try {
+    res.render("user/forgot-password")
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
 const postForgot = async (req,res)=>{
   try {
     console.log(req.body);
@@ -531,7 +514,7 @@ const viewShop = async (req, res) => {
 
 module.exports = {
   loadHomePage,
-  getProfile,
+  //getProfile,
   loadUserRegister,
   loadUserLogin,
   registerUser,

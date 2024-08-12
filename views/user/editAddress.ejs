@@ -1,0 +1,138 @@
+<%- include("layout/header1.ejs") %>
+
+<main class="main main-test">
+    <div class="container checkout-container">
+        <div class="page-header">
+            <div class="container d-flex flex-column align-items-center">
+                <h1>EDIT ADDRESSES</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-7">
+                <ul class="checkout-steps">
+                    <li>
+                       <%  if(addressData) {%>
+                        <form  id="editAddressform" >
+                            <input type="hidden" id="addressId"  value="<%= addressData._id %>">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>First name
+                                            <abbr class="required" title="required">*</abbr>
+                                        </label>
+                                        <input type="text" class="form-control" id="fname" name="fname" value="<%= addressData.fname %>">
+                                        <p class="error1 mb-2" id="fnameerror" style="display: none; color: red;"></p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Last name
+                                            <abbr class="required" title="required">*</abbr></label>
+                                        <input type="text" class="form-control" id="lname" name="lname" value="<%= addressData.lname %>">
+                                        <p class="error1 mb-2" id="lnameerror" style="display: none; color: red;"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Phone <abbr class="required" title="required">*</abbr></label>
+                                <input type="tel" class="form-control" id="mobile" name="mobile" value="<%= addressData.mobile %>">
+                                <p class="error1 mb-2" id="mobileerror" style="display: none; color: red;"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label>House/Flat No.
+                                    <abbr class="required" title="required">*</abbr></label>
+                                <input type="text" class="form-control" id="houseno" name="houseno" value="<%= addressData.houseno %>">
+                                <p class="error1 mb-2" id="housenoerror" style="display: none; color: red;"></p>
+
+                            </div>
+
+                            <div class="form-group mb-1 pb-2">
+                                <label>Street address
+                                    <abbr class="required" title="required">*</abbr></label>
+                                <input type="text" class="form-control" placeholder="Street name" id="street" name="street" value="<%= addressData.street_address %>">
+                                <p class="error1 mb-2" id="streeterror" style="display: none; color: red;"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Landmark
+                                    <abbr class="required" title="required">*</abbr></label>
+                                <input type="text" class="form-control" id="landmark" name="landmark" value="<%= addressData.landmark %>">
+                                <p class="error1 mb-2" id="landmarkerror" style="display: none; color: red;"></p>
+                            </div>
+
+                            <div class="form-group mb-1 pb-2">
+                                <label>Town
+                                    <abbr class="required" title="required">*</abbr></label>
+                                <input type="text" class="form-control" placeholder="town" id="town" name="town" value="<%= addressData.town %>">
+                                <p class="error1 mb-2" id="townerror" style="display: none; color: red;"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label>District
+                                    <abbr class="required" title="required">*</abbr></label>
+                                <input type="text" class="form-control" id="district" name="district" value="<%= addressData.district %>">
+                                <p class="error1 mb-2" id="districterror" style="display: none; color: red;"></p>
+                            </div>
+
+                            <div class="select-custom">
+                                <label>Country / Region
+                                    <abbr class="required" title="required">*</abbr></label>
+                                <select name="country" class="form-control" id="country">
+                                    <option value="" selected="selected">--Select--</option>
+                                </select>
+                                <p class="error1 mb-2" id="countryerror" style="display: none; color: red;"></p>
+                            </div>
+
+                            <div class="select-custom">
+                                <label>State<abbr class="required" title="required">*</abbr></label>
+                                <select name="state" class="form-control" id="state">
+                                    <option value="" selected="selected">--Select--</option>
+                                </select>
+                                <p class="error1 mb-2" id="stateerror" style="display: none; color: red;"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Postcode / Zip
+                                    <abbr class="required" title="required">*</abbr></label>
+                                <input type="text" class="form-control" id="pincode" name="pincode" value="<%= addressData.pincode %>">
+                                <p class="error1 mb-2" id="pinerror" style="display: none; color: red;"></p>
+                            </div>
+
+                            <!-- <div class="form-group">
+                                <div class="custom-control custom-checkbox mt-0">
+                                    <input type="checkbox" class="custom-control-input" id="different-shipping" />
+                                    <label class="custom-control-label" data-toggle="collapse" data-target="#collapseFour" aria-controls="collapseFour" for="different-shipping">Ship to a
+                                        different
+                                        address?</label>
+
+
+                                </div>
+                            </div> -->
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary submitbtn"> Edit Address</button>
+                            </div>
+
+                        </form>
+                        <% }else{ %>
+                            <p class="text-danger"><%= error %></p>
+                            <% } %>
+                    </li>
+                </ul>
+            </div>
+            <!-- End .col-lg-8 -->
+            <!-- End .col-lg-4 -->
+        </div>
+        <!-- End .row -->
+    </div>
+    <!-- End .container -->
+</main>
+
+<script src="/public/js/editAddress.js"></script>
+
+
+<%- include("layout/footer.ejs") %>

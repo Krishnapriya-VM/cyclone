@@ -41,15 +41,31 @@ const userSchema = new mongoose.Schema({
         ],
         default: []
     },
+    wishlist:{
+        type:[
+        {
+            product_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref:'product'
+        }
+        },
+            ],
+    default: []
+    },
+    coupon_id:{
+        type:[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref:'Coupon'
+          }],
+        default:[]
+    },
     isBlocked:{
         type: Number,
         default: 0
+    },
+    walletamount: {
+        type: Number,
+        default: 0
     }
-
 })
 module.exports = mongoose.model("User", userSchema)
-
-
-
-
-

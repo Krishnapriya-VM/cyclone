@@ -95,5 +95,4 @@ module.exports = {
     isLoggedIn,
     isLoggedOut,
     isHome
-
 }

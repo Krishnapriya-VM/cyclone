@@ -127,6 +127,7 @@ const postEditProduct = async (req, res) => {
     } else {
       await Product.updateOne({ _id: id }, { productname: productname, stock: stock, brand_id: brandname, category_id: procategory, description: description, price: price })
     }
+    console.log("EDITED");
     res.redirect('/admin/products');
   } catch (error) {
     console.log(error.message)

@@ -69,7 +69,7 @@ async function addBrand(namedata, imagedata, status){
             document.getElementById('success_mess').innerHTML = data.message;
             setTimeout(() =>{
                 window.location.href = '/admin/brand'
-            }, 1000)
+            }, 1000) 
         }
     } catch (error) {
       console.log(error.message);  

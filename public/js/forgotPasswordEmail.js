@@ -37,32 +37,32 @@ async function acceptEmail(mail){
             body:JSON.stringify({mail})
         })
         const data = await res.json()
-        console.log(data);
+        console.log("DATA",data);
         if(data.message){
-            document.getElementById('success_mess').innerHTML = data.message;
+            document.getElementById('success_mess').innerHTML = `<p style="color: green;"><b>${data.message}</b></p>`;
             setTimeout(()=>{
                 window.location.href = '/reset-otp'
             },3000)
+        }else{
+            document.getElementById('success_mess').innerHTML = `<p style="color: red;"><b>${data.error || 'An error occurred'}</b></p>`;
+            setTimeout(() => {
+                document.getElementById('success_mess').innerHTML = '';
+              }, 2000);
         }
     } catch (error) {
-        console.log(error.message);
+        console.log("ERR",error.message);
     }
 }
 
 
 forgotForm.addEventListener('submit', (event) =>{
+    event.preventDefault();
 
     const emailData = email.value;
 
     emailForgot(emailData);
 
-    if(error1.innerHTML !== ""){
-        event.preventDefault();
-    }else{
+    if(error1.innerHTML === ""){
         acceptEmail(emailData)
     }
-})
-
-
-        
-   
+})  

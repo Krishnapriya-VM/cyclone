@@ -2,9 +2,13 @@ const express = require("express");
 const router = express.Router();
 
 const userController = require("../controllers/user/userController");
-const cartController = require("../controllers/user/cartController")
+const cartController = require("../controllers/user/cartController");
+const checkoutController = require("../controllers/user/checkoutController");
+const addressController = require("../controllers/user/addressController");
+const orderController = require("../controllers/user/orderController")
+const paymentController = require("../controllers/user/paymentController")
 const userAuth = require("../middleware/userAuth");
-const userModel = require("../models/userModel");
+
 const passport = require("passport");
 require("../utils/passportConfig");
 
@@ -13,9 +17,12 @@ router.get("/success", userAuth.isLoggedOut, passport.authenticate("google", { f
 
 router.get("/", userAuth.isHome, userController.loadHomePage);
 router.get("/user-profile",userAuth.isLoggedIn, userController.loadProfile);
-router.get("/user-details", userAuth.isLoggedIn, userController.getProfile);
-router.post("/edit-user-details",userAuth.isLoggedIn, userController.editProfile);
 
+router.post("/user-profile",userAuth.isLoggedIn, userController.editProfile);
+router.get("/view-orders", userAuth.isLoggedIn, orderController.viewOrder);
+router.get("/order-details", userAuth.isLoggedIn, orderController.orderDetails);
+router.get("/change-password", userAuth.isLoggedIn);
+router.post("/change-password", userAuth.isLoggedIn)
 
 router.get("/user-login", userAuth.isLoggedOut, userController.loadUserLogin);
 router.post("/user-login", userAuth.isLoggedOut, userController.postLogin);
@@ -39,11 +46,30 @@ router.post("/verify-otp/resendOtp", userAuth.isLoggedOut, userController.resend
 
 router.get("/productdetails", userAuth.isHome, userController.viewProduct)
 
-router.get("/shop", userAuth.isHome, userController.viewShop)
+router.get("/shop", userAuth.isHome, userController.viewShop);
 
 router.get("/cart", userAuth.isLoggedIn, cartController.viewCart)
 router.get("/addToCart", userAuth.isLoggedIn, cartController.addToCart);
-router.get("/cart/increment-quantity", userAuth.isLoggedIn)
+router.get("/cart/increment-quantity", userAuth.isLoggedIn, cartController.incrementQuantity)
+router.get("/cart/decrement-quantity", userAuth.isLoggedIn, cartController.decrementQuantity)
+router.get("/cart/deleteCart", userAuth.isLoggedIn, cartController.deleteFromCart)
+
+router.get("/address", userAuth.isLoggedIn, addressController.loadAddress);
+router.get("/address/add-address", userAuth.isLoggedIn, addressController.loadAddAddress);
+router.post("/address/add-address", userAuth.isLoggedIn, addressController.postAddAddress);
+
+router.get("/address/edit-address/:id", userAuth.isLoggedIn, addressController.loadEditAddress);
+router.post("/address/edit-address/:id", userAuth.isLoggedIn, addressController.postEditAddress);
+
+router.delete('/address/remove-address/:id', userAuth.isLoggedIn, addressController.deleteAddress);
+
+router.post("/apply-coupon", userAuth.isLoggedIn, checkoutController.applyCoupon)
+router.get("/checkout", userAuth.isLoggedIn, checkoutController.loadCheckOut)
+
+router.post("/place-order", userAuth.isLoggedIn, paymentController.paymentConfirm);
+router.post("/verify-payment", userAuth.isLoggedIn, paymentController.verifyPayment)
+
+router.get("/order", userAuth.isLoggedIn, orderController.loadOrders)
 
 router.get("/logout",userAuth.isLoggedIn, userController.logOut);
 

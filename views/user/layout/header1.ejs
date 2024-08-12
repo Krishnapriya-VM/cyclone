@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Cyclone</title>
+
+	<meta name="keywords" content="HTML5 Template" />
+	<meta name="description" content="Porto - Bootstrap eCommerce Template">
+	<meta name="author" content="SW-THEMES">
+
+	<!-- Favicon -->
+	<link rel="icon" type="image/x-icon" href="/public/assets/images/icons/favicon.png">
+
+
+	<script>
+		WebFontConfig = {
+			google: { families: [ 'Open+Sans:300,400,600,700,800', 'Poppins:300,400,500,600,700', 'Shadows+Into+Light:400' ] }
+		};
+		( function ( d ) {
+			var wf = d.createElement( 'script' ), s = d.scripts[ 0 ];
+			wf.src = '/public/assets/js/webfont.js';
+			wf.async = true;
+			s.parentNode.insertBefore( wf, s );
+		} )( document );
+	</script>
+
+	<!-- Plugins CSS File -->
+	<link rel="stylesheet" href="/public/assets/css/bootstrap.min.css">
+
+	<!-- Main CSS File -->
+	<link rel="stylesheet" href="/public/assets/css/style.min.css">
+	<link rel="stylesheet" type="text/css" href="/public/assets/vendor/fontawesome-free/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="/public/assets/vendor/simple-line-icons/css/simple-line-icons.min.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+        .crossbtn{
+            background-color: white;
+            border:none;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.13);
+            border-radius: 50%;
+            padding: 0px 6px 0px  6px;            
+        }
+    </style>
+	<style>
+        /* Include the CSS code here */
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+
+    </style>
+
+    <style>
+        .custom-success-icon {
+            background-color: #1b91e0;
+            border-radius: 50%;
+            color: white;
+            font-size: 50px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px auto;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .custom-order-success-container {
+            text-align: center;
+            margin: 20px auto;
+            max-width: 1000px;
+        }
+
+        .custom-order-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .custom-product-details {
+            flex: 0 0 65%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .custom-shipping-details {
+            flex: 0 0 30%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .custom-product-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .custom-product-item img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .custom-subtotal-box {
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        .custom-continue-shopping {
+            margin-top: 30px;
+        }
+
+    </style>
+
+    <style>
+    .out-of-stock-badge {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgb(195, 35, 35);
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        z-index: 10;
+        white-space: nowrap;
+        border: none;
+        width: calc(100% - 40px);
+    }
+
+    /* .out-of-stock-badge {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: red;
+        color: white;
+        padding: 10px 20px; 
+        font-size: 16px;    
+        font-weight: bold;  
+        border-radius: 3px;
+        z-index: 10;
+        text-align: center;
+        white-space: nowrap;
+    } */
+
+    </style>
+
+</head>
+
+<body>
+    <div class="page-wrapper">
+        
+        <header class="header">
+
+            <div class="header-middle sticky-header" data-sticky-options="{'mobile': true}">
+                <div class="container">
+                    <div class="header-left col-lg-2 w-auto pl-0">
+                        <button class="mobile-menu-toggler text-primary mr-2" type="button">
+							<i class="fas fa-bars"></i>
+						</button>
+                        <a href="demo4.html" class="logo">
+                            <img src="/public/image/cyclone-logo.png" width="111" height="44" alt="Cyclone Logo">
+                        </a>
+                    </div>
+                    <!-- End .header-left -->
+
+                    <div class="header-right w-lg-max">
+                        <div class="header-icon header-search header-search-inline header-search-category w-lg-max text-right mt-0">
+                            <a href="#" class="search-toggle" role="button"><i class="icon-search-3"></i></a>
+                            <form action="#" method="get">
+                                <div class="header-search-wrapper">
+                                    <input type="search" class="form-control" name="q" id="q" placeholder="Search..." required>
+                                    <div class="select-custom">
+                                        <select id="cat" name="cat">
+											<option value="">All Categories</option>
+											<option value="5">Bikes</option>
+										</select>
+                                    </div>
+                                    <!-- End .select-custom -->
+                                    <button class="btn icon-magnifier p-0" title="search" type="submit"></button>
+                                </div>
+                                <!-- End .header-search-wrapper -->
+                            </form>
+                        </div>
+                        <!-- End .header-search -->
+
+                        <% if(locals.userid) {%>
+                            <a href="/user-profile" title="profile" class="header-icon">
+                                <i class="icon-user-2"></i>
+                            </a>
+                        <% }else{ %>
+                            <a href="/user-login" title="profile" class="header-icon">
+                                <i class="icon-user-2"></i>
+                            </a>
+                        <% } %>
+
+                        <a href="wishlist.html" class="header-icon" title="wishlist"><i class="icon-wishlist-2"></i></a>
+
+                        <a href="/cart" class="header-icon" title="cart"><i class="minicart-icon"></i></a>
+
+                        <!-- <div class="dropdown cart-dropdown">
+                            <a href="/cart" title="Cart" class="dropdown-toggle cart-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                                <i class="minicart-icon"></i>
+                                <span class="cart-count badge-circle">3</span>
+                            </a>
+
+                            <div class="cart-overlay"></div>
+
+                            <div class="dropdown-menu mobile-cart">
+                                <a href="#" title="Close (Esc)" class="btn-close">×</a>
+
+                                <div class="dropdownmenu-wrapper custom-scrollbar">
+                                    <div class="dropdown-cart-header">Shopping Cart</div>
+                                   
+
+                                    <div class="dropdown-cart-products">
+                                        <div class="product">
+                                            <div class="product-details">
+                                                <h4 class="product-title">
+                                                    <a href="product.html">Ultimate 3D Bluetooth Speaker</a>
+                                                </h4>
+
+                                                <span class="cart-product-info">
+													<span class="cart-product-qty">1</span> × $99.00
+                                                </span>
+                                            </div>
+                                            
+
+                                            <figure class="product-image-container">
+                                                <a href="product.html" class="product-image">
+                                                    <img src="/public/assets/images/products/product-1.jpg" alt="product" width="80" height="80">
+                                                </a>
+
+                                                <a href="#" class="btn-remove" title="Remove Product"><span>×</span></a>
+                                            </figure>
+                                        </div>
+                                       
+
+                                        <div class="product">
+                                            <div class="product-details">
+                                                <h4 class="product-title">
+                                                    <a href="product.html">Brown Women Casual HandBag</a>
+                                                </h4>
+
+                                                <span class="cart-product-info">
+													<span class="cart-product-qty">1</span> × $35.00
+                                                </span>
+                                            </div>
+                                         
+
+                                            <figure class="product-image-container">
+                                                <a href="product.html" class="product-image">
+                                                    <img src="/public/assets/images/products/product-2.jpg" alt="product" width="80" height="80">
+                                                </a>
+
+                                                <a href="#" class="btn-remove" title="Remove Product"><span>×</span></a>
+                                            </figure>
+                                        </div>
+                                      
+
+                                        <div class="product">
+                                            <div class="product-details">
+                                                <h4 class="product-title">
+                                                    <a href="product.html">Circled Ultimate 3D Speaker</a>
+                                                </h4>
+
+                                                <span class="cart-product-info">
+													<span class="cart-product-qty">1</span> × $35.00
+                                                </span>
+                                            </div>
+                                            
+
+                                            <figure class="product-image-container">
+                                                <a href="product.html" class="product-image">
+                                                    <img src="/public/assets/images/products/product-3.jpg" alt="product" width="80" height="80">
+                                                </a>
+                                                <a href="#" class="btn-remove" title="Remove Product"><span>×</span></a>
+                                            </figure>
+                                        </div>
+                                        
+                                    </div>
+                                    
+
+                                    <div class="dropdown-cart-total">
+                                        <span>SUBTOTAL:</span>
+
+                                        <span class="cart-total-price float-right">$134.00</span>
+                                    </div>
+                                    
+
+                                    <div class="dropdown-cart-action">
+                                        <a href="cart.html" class="btn btn-gray btn-block view-cart">View
+											Cart</a>
+                                        <a href="checkout.html" class="btn btn-dark btn-block">Checkout</a>
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+                            
+                        </div> -->
+                        <!-- End .dropdown -->
+                    </div>
+                    <!-- End .header-right -->
+                </div>
+                <!-- End .container -->
+            </div>
+            <!-- End .header-middle -->
+
+            <div class="header-bottom sticky-header d-none d-lg-block" data-sticky-options="{'mobile': false}">
+                <div class="container">
+                    <nav class="main-nav w-100">
+                        <ul class="menu">
+                            <li class="active">
+                                <a href="/">Home</a>
+                            </li>
+                            <li>
+                                <a href="/shop">Shop</a>
+                            </li>
+                            
+                            <li>
+                                <a href="#">Profile</a>
+                                <ul>
+                                    <li><a href="wishlist.html">Wishlist</a></li>
+                                    <li><a href="/cart">Shopping Cart</a></li>
+                                    <li><a href="/checkout">Checkout</a></li>
+                                    <li><a href="/user-profile">Dashboard</a></li>
+                                    <li><a href="/user-login">Login</a></li>
+                                    <li><a href="/reset-link">Forgot Password</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Special Offer!</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <!-- End .container -->
+            </div>
+            <!-- End .header-bottom -->
+        </header>

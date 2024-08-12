@@ -46,12 +46,12 @@
                             <div class="card-body">
                                 <div>
                                     <label for="mainimage">Main Image</label>
-                                    <input type="file" id="mainimage" name="mainimage" class="form-control" >
+                                    <input type="file" id="mainimage" name="mainimage" class="form-control" accept="image/*">
                                     <div class="row mb-2" id="imagePreview"></div>
                                     <p class="perror mb-2" id="error6" style="display: none; color: red;"></p>
                                     <br>
                                     <label for="imgs">Image</label>
-                                    <input type="file" id="imgs" name="imgs" class="form-control"  multiple>
+                                    <input type="file" id="imgs" name="imgs" class="form-control" accept="image/*"  multiple>
                                     <div class="row mb-8" id="imagePreviews"></div>
                                     <p class="perror mb-2" id="error7" style="display: none; color: red;"></p>
                                 </div>
@@ -94,6 +94,6 @@
 </section>
 
         
-
+  
 <script src="../../public/js/product.js"></script>
 <%- include('layout/footer.ejs') %>

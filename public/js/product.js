@@ -234,7 +234,7 @@ async function addProduct(pdata, ddata, catdata, bdata, prdata, sdata){
         const mdata = main.files[0];
         const idata = imgs.files;
         const formdata = new FormData()
-        formdata.append('productname', pdata);
+        formdata.append('productname', pdata);  
         formdata.append('procategory', catdata);
         formdata.append('brandname', bdata)
         formdata.append('description', ddata)
@@ -310,7 +310,7 @@ document.getElementById('mainimage').addEventListener('change', function(event) 
             imagePreviewCont.className = 'preview-image-container';
             imagePreview.className = 'preview-image';
             imagePreview.style.display = 'none';
-            imagePreview.src = '';
+            imagePreview.src = '';  
             imagePreview.alt = 'Preview';
             imagePreview.style.maxWidth = '100px';
             imagePreview.style.maxHeight = '100px';

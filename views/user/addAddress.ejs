@@ -1,0 +1,134 @@
+<%- include("layout/header1.ejs") %>
+
+<main class="main main-test">
+    <div class="container checkout-container">
+        <div class="page-header">
+            <div class="container d-flex flex-column align-items-center">
+                <h1>ADD ADDRESSES</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-7">
+                <ul class="checkout-steps">
+                    <li>
+
+                        <form action="/address/add-address" id="addAddressform" method="post">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>First name
+                                            <abbr class="required" title="required">*</abbr>
+                                        </label>
+                                        <input type="text" class="form-control" id="fname" name="fname">
+                                        <p class="error1 mb-2" id="fnameerror" style="display: none; color: red;"></p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Last name
+                                            <abbr class="required" title="required">*</abbr></label>
+                                        <input type="text" class="form-control" id="lname" name="lname">
+                                        <p class="error1 mb-2" id="lnameerror" style="display: none; color: red;"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Phone <abbr class="required" title="required">*</abbr></label>
+                                <input type="tel" class="form-control" id="mobile" name="mobile">
+                                <p class="error1 mb-2" id="mobileerror" style="display: none; color: red;"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label>House/Flat No.
+                                    <abbr class="required" title="required">*</abbr></label>
+                                <input type="text" class="form-control" id="houseno" name="houseno">
+                                <p class="error1 mb-2" id="housenoerror" style="display: none; color: red;"></p>
+
+                            </div>
+
+                            <div class="form-group mb-1 pb-2">
+                                <label>Street address
+                                    <abbr class="required" title="required">*</abbr></label>
+                                <input type="text" class="form-control" placeholder="Street name" id="street" name="street">
+                                <p class="error1 mb-2" id="streeterror" style="display: none; color: red;"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Landmark
+                                    <abbr class="required" title="required">*</abbr></label>
+                                <input type="text" class="form-control" id="landmark" name="landmark">
+                                <p class="error1 mb-2" id="landmarkerror" style="display: none; color: red;"></p>
+                            </div>
+
+                            <div class="form-group mb-1 pb-2">
+                                <label>Town
+                                    <abbr class="required" title="required">*</abbr></label>
+                                <input type="text" class="form-control" placeholder="town" id="town" name="town">
+                                <p class="error1 mb-2" id="townerror" style="display: none; color: red;"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label>District
+                                    <abbr class="required" title="required">*</abbr></label>
+                                <input type="text" class="form-control" id="district" name="district">
+                                <p class="error1 mb-2" id="districterror" style="display: none; color: red;"></p>
+                            </div>
+
+                            <div class="select-custom">
+                                <label>Country / Region
+                                    <abbr class="required" title="required">*</abbr></label>
+                                <select name="country" class="form-control" id="country">
+                                    <option value="" selected="selected">--Select--</option>
+                                </select>
+                                <p class="error1 mb-2" id="countryerror" style="display: none; color: red;"></p>
+                            </div>
+
+                            <div class="select-custom">
+                                <label>State<abbr class="required" title="required">*</abbr></label>
+                                <select name="state" class="form-control" id="state">
+                                    <option value="" selected="selected">--Select--</option>
+                                </select>
+                                <p class="error1 mb-2" id="stateerror" style="display: none; color: red;"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Postcode / Zip
+                                    <abbr class="required" title="required">*</abbr></label>
+                                <input type="text" class="form-control" id="pincode" name="pincode">
+                                <p class="error1 mb-2" id="pinerror" style="display: none; color: red;"></p>
+                            </div>
+
+                            <!-- <div class="form-group">
+                                <div class="custom-control custom-checkbox mt-0">
+                                    <input type="checkbox" class="custom-control-input" id="different-shipping" />
+                                    <label class="custom-control-label" data-toggle="collapse" data-target="#collapseFour" aria-controls="collapseFour" for="different-shipping">Ship to a
+                                        different
+                                        address?</label>
+
+
+                                </div>
+                            </div> -->
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary submitbtn"> Add Address</button>
+                            </div>
+
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <!-- End .col-lg-8 -->
+            <!-- End .col-lg-4 -->
+        </div>
+        <!-- End .row -->
+    </div>
+    <!-- End .container -->
+</main>
+
+<script src="/public/js/addAddress.js"></script>
+
+
+<%- include("layout/footer.ejs") %>

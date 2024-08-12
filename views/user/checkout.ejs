@@ -1,0 +1,263 @@
+<%- include("layout/header1.ejs") %>
+
+<main class="main main-test">
+    <div class="container checkout-container">
+        <ul class="checkout-progress-bar d-flex justify-content-center flex-wrap">
+            <li>
+                <a href="/cart">Shopping Cart</a>
+            </li>
+            <li class="active">
+                <a href="/checkout">Checkout</a>
+            </li>
+            <li class="actve">
+                <a href="/order">Order Complete</a>
+            </li>
+        </ul>
+
+        <div class="checkout-discount">
+
+            <h3>Wants to add a new Address?
+                <button class="btn btn-sm mt-0" type="submit" onclick="window.location.href='/address/add-address?check=true'" style="font-size: 1rem; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px;">Add Address</button>
+            </h3>
+            
+            <h4>Have a coupon?
+                <button data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne" class="btn btn-link btn-toggle">ENTER YOUR CODE</button>
+            </h4>
+
+            <div id="collapseTwo" class="collapse">
+                <div class="feature-box">
+                    <div class="feature-box-content">
+                        <p>If you have a coupon code, please apply it below.</p>
+
+                        <div id="coupon-list">
+                            <h5>Available Coupons:</h5>
+                            <% if(coupons && coupons.length > 0) { %>
+                            <ul>
+                                <% coupons.forEach(coupon => { %>
+                                    <li>
+                                        <strong style="color: #007bff;;"><%= coupon.couponcode %></strong>: <%= coupon.description %> (Reduction Rate: Rs. <%= coupon.reductionrate %>)
+                                    </li>
+                                <% }) %>
+                            </ul>
+                            <% }else { %>
+                                <p>No coupons available!!</p>
+                            <% } %>
+                        </div>
+                        <% if(coupons && coupons.length > 0){ %>
+                        <form id="apply-coupon-form" >
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm w-auto" id="coupon-code" placeholder="Coupon code" required="" />
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm mt-0" type="submit">
+                                        Apply Coupon
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    
+        <form method="/place-order" method="post">
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="address-selection">
+                        <% if (locals.addressData && locals.addressData.length > 0) { %>
+                            <h4>Select Shipping Address</h4>
+                            <% locals.addressData.forEach((address, index) => { %>
+                                <div class="custom-control custom-radio mb-3">
+                                    <input type="radio" id="address<%= index %>" name="address_id" class="custom-control-input" value="<%= address._id %>" 
+                                    <%= index === 0 ? 'checked' : '' %>>
+                                    <label class="custom-control-label" for="address<%= index %>">
+                                        <p><strong>Name:</strong> <%= address.fname %> <%= address.lname %></p>
+                                        <p><strong>Mobile:</strong> <%= address.mobile %></p>
+                                        <p><strong>House/Flat No:</strong> <%= address.houseno %></p>
+                                        <p><strong>Street Address:</strong> <%= address.street_address %></p>
+                                        <p><strong>Landmark:</strong> <%= address.landmark %></p>
+                                        <p><strong>Town:</strong> <%= address.town %></p>
+                                        <p><strong>District:</strong> <%= address.district %></p>
+                                        <p><strong>State:</strong> <%= address.state %></p>
+                                        <p><strong>Country:</strong> <%= address.country %></p>
+                                        <p><strong>Pin Code:</strong> <%= address.pincode %></p>
+                                    </label>
+                                    <a href="/address/edit-address/<%= address._id %>" class="btn btn-link">Edit</a>
+                                    <a href="/address/remove-address/<%= address._id %>" class="btn btn-link remove-address" data-id="<%= address._id %>">Remove</a>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <h4>No addresses found</h4>
+                            <button class="btn btn-primary" onclick="window.location.href='/address/add-address'">Add Address</button>
+                        <% } %>
+                    </div>
+                </div>
+                <!-- End .col-lg-8 -->
+    
+                <div class="col-lg-5">
+                    <div class="order-summary">
+                        <h3>YOUR ORDER</h3>
+    
+                        <table class="table table-mini-cart">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Product</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% let subtotal = 0; %>
+                                <% locals.udata.cart.forEach(item => { %>
+                                <tr data-product-id="<%= item.product_id._id %>">
+                                    <td class="product-col">
+                                        <h3 class="product-title">
+                                            <%= item.product_id.productname %> ×
+                                            <span class="product-qty"><%= item.quantity %></span>
+                                        </h3>
+                                    </td>
+    
+                                    <td class="price-col">
+                                        <% let itemTotal = item.product_id.price * item.quantity; %>
+                                        <span class="product-total">Rs: <%= itemTotal %></span>
+                                    </td>
+                                </tr>
+                                <% subtotal+= itemTotal; %>
+                                <% }); %>
+                            </tbody>
+                            
+                            <tfoot>
+                                <tr class="cart-subtotal">
+                                    <td>
+                                        <h4>Subtotal</h4>
+                                    </td>
+    
+                                    <td class="price-col">
+                                        <span>Rs: <%= subtotal %></span>
+                                    </td>
+                                </tr>
+                                <tr class="order-shipping">
+                                    <td class="text-left" colspan="2">
+                                        <h4 class="m-b-sm">Payment Methods</h4>
+    
+                                        <div class="form-group form-group-custom-control">
+                                            <div class="custom-control custom-radio d-flex">
+                                                <input type="radio" class="custom-control-input" name="payment_method" value="Wallet" checked />
+                                                <label class="custom-control-label"><b>Wallet Payment</b></label>
+                                            </div>
+                                            <!-- End .custom-checkbox -->
+                                        </div>
+                                        <!-- End .form-group -->
+    
+                                        <div class="form-group form-group-custom-control">
+                                            <div class="custom-control custom-radio d-flex">
+                                                <input type="radio" class="custom-control-input" name="payment_method" value="Razorpay" />
+                                                <label class="custom-control-label"><b>RazorPay</b></label>
+                                            </div>
+                                            <!-- End .custom-checkbox -->
+                                        </div>
+                                        <!-- End .form-group -->
+    
+                                        <div class="form-group form-group-custom-control">
+                                            <div class="custom-control custom-radio d-flex">
+                                                <input type="radio" class="custom-control-input" name="payment_method" value="COD" />
+                                                <label class="custom-control-label"><b>Cash On Delivery</b></label>
+                                            </div>
+                                            <!-- End .custom-checkbox -->
+                                        </div>
+                                        <!-- End .form-group -->
+                                    </td>
+    
+                                </tr>
+    
+                                <tr class="order-total">
+                                    <td>
+                                        <h4>Total</h4>
+                                    </td>
+                                    <td>
+                                        <b class="total-price"><span>Rs: <%= subtotal %></span></b>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+    
+                        <button type="button"  class="btn btn-dark btn-place-order" form="checkout-form">
+                            Place order
+                        </button>
+                    </div>
+                    <!-- End .cart-summary -->
+                </div>
+                <!-- End .col-lg-4 -->
+            </div>
+            <!-- End .row -->
+        </form>
+    </div>
+    <!-- End .container -->
+</main>
+
+<script>
+    document.getElementById('apply-coupon-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const couponCode = document.getElementById('coupon-code').value.trim();
+
+        if (!couponCode) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please enter a coupon code!',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        try {
+            const response = await fetch('/apply-coupon', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ couponCode })
+            });
+
+            const result = await response.json();
+            console.log(result)
+
+            if (response.ok) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: `Coupon applied successfully. Your discount is Rs. ${result.discountAmount}.`,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    
+                    const totalPriceElement = document.querySelector('.order-total .total-price span');
+                    const subtotal = parseInt(totalPriceElement.textContent.replace('Rs:', ''));
+                    const newTotal = subtotal - result.discountAmount;
+                    totalPriceElement.textContent = `Rs: ${newTotal}`;
+
+                    
+                    document.getElementById('coupon-code').disabled = true;
+                    document.querySelector('#apply-coupon-form button').disabled = true;
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: result.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'An error occurred while applying the coupon. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+</script>
+
+<script src="/public/js/placeOrder.js"></script>
+
+<%- include("layout/footer.ejs") %>

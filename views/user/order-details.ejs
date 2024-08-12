@@ -1,0 +1,82 @@
+<%- include("layout/header1.ejs") %>
+
+<main class="main">
+    <div class="page-header">
+        <div class="container d-flex flex-column align-items-center">
+            <h1>Order Details</h1>
+        </div>
+    </div>
+
+    <div class="container account-container custom-account-container">
+        <div class="row">
+            <div class="sidebar widget widget-dashboard mb-lg-0 mb-3 col-lg-3 order-0">
+                <ul class="nav nav-tabs list flex-column mb-0" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user-profile" role="tab" aria-controls="edit" aria-selected="false">Account details</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/view-orders" role="tab" aria-controls="order" aria-selected="true">Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/downloads" role="tab" aria-controls="download" aria-selected="false">Downloads</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/address">Addresses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shipping" role="tab" aria-controls="shipping" aria-selected="false">Shopping Address</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/wishlist">Wishlist</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-9 order-lg-last order-1 tab-content">
+                <div class="tab-pane fade show active" id="order-details" role="tabpanel">
+                    <div class="order-details-content">
+                        <h3 class="account-sub-title d-none d-md-block"><i class="sicon-social-dropbox align-middle mr-3"></i>Order Details</h3>
+                        <div class="order-summary">
+                            <h4>Order ID: <%= order._id %></h4><br>
+                            <p>Date: <%= order.date.toLocaleDateString() %></p>
+                            <p>Status: <%= order.products[0].status %></p>
+                            <p>Total Amount: Rs: <%= order.total_amount %></p>
+                            <h5>Products:</h5>
+                            <ul>
+                                <% order.products.forEach(product => { %>
+                                    <li>
+                                        <p>Product Name: <%= product.product_id.name %></p>
+                                        <p>Quantity: <%= product.quantity %></p>
+                                        <p>Price: Rs:<%= product.price %></p>
+                                        <p>Status: <%= product.status %></p>
+                                        <img src="/public/image/<%= product.image %>" alt="Product Image" style="width: 100px; height: auto;">
+                                    </li>
+                                <% }); %>
+                            </ul>
+                            <h5>Shipping Address:</h5>
+                            <p><%= order.address_id.fname %> <%= order.address_id.lname %></p>
+                            <p><%= order.address_id.houseno %>, <%= order.address_id.street_address %></p>
+                            <p><%= order.address_id.landmark %></p>
+                            <p><%= order.address_id.town %>, <%= order.address_id.district %>, <%= order.address_id.state %></p>
+                            <p><%= order.address_id.country %> - <%= order.address_id.pincode %></p>
+                            <p>Contact: <%= order.address_id.mobile %></p>
+                            <h5>Payment Method:</h5>
+                            <p><%= order.payment_method %></p>
+                            <h5>Payment Status:</h5>
+                            <p><%= order.payment_status %></p>
+                            <form action="/cancel-order/<%= order._id %>" method="POST">
+                                <button type="submit" class="btn btn-danger">Cancel Order</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End .tab-content -->
+        </div><!-- End .row -->
+    </div><!-- End .container -->
+
+    <div class="mb-5"></div><!-- margin -->
+</main><!-- End .main -->
+
+<%- include("layout/footer.ejs") %>

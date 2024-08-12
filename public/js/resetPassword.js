@@ -52,7 +52,7 @@
             confirmNewPassword(cpasswordData)
         })
         
-        confirmpass.addEventListener('keyup', () =>{
+        confirmpass.addEventListener('blur', () =>{
             const cpasswordData = confirmpass.value;
             confirmNewPassword(cpasswordData)
         })
@@ -61,14 +61,13 @@
         forgotForm.addEventListener('submit', (event)=>{
             const passwordData = newpass.value;
             const cpasswordData = confirmpass.value;
+            event.preventDefault();
 
 
             newPassword(passwordData);
             confirmNewPassword(cpasswordData);
 
-            if(error1.innerHTML !== "" || error2.innerHTML !== ""){
-                event.preventDefault();
-            }else{
+            if(error1.innerHTML === "" || error2.innerHTML === ""){
                 acceptPassword(newpass.value,confirmpass.value)
             }
 

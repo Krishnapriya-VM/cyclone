@@ -1,0 +1,94 @@
+<%- include("layout/header1.ejs") %>
+
+<main class="main">
+    <div class="page-header">
+        <div class="container d-flex flex-column align-items-center">
+            <h1>My Account</h1>
+        </div>
+    </div>
+
+    <div class="container account-container custom-account-container">
+        <div class="row">
+            <div class="sidebar widget widget-dashboard mb-lg-0 mb-3 col-lg-3 order-0">
+                <ul class="nav nav-tabs list flex-column mb-0" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user-profile" role="tab" aria-controls="edit" aria-selected="false">Account details</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/view-orders" role="tab" aria-controls="order" aria-selected="true">Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/downloads" role="tab" aria-controls="download" aria-selected="false">Downloads</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/address" >Addresses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shipping" role="tab" aria-controls="shipping" aria-selected="false">Shopping Address</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/wishlist">Wishlist</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-9 order-lg-last order-1 tab-content">
+                <div id="dashboard-content">
+                    <div class="tab-pane active" id="order" role="tabpanel">
+                        <div class="order-content">
+                            <h3 class="account-sub-title d-none d-md-block"><i
+                                    class="sicon-social-dropbox align-middle mr-3"></i>Orders</h3>
+                            <div class="order-table-container text-center">
+                                <table class="table table-order text-left">
+                                    <thead>
+                                        <tr>
+                                            <th class="order-id">ORDER ID</th>
+                                            <th class="order-date">DATE</th>
+                                            <th class="order-status">STATUS</th>
+                                            <th class="order-price">TOTAL</th>
+                                            <th class="order-action">ACTIONS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if(orders.length > 0) { %>
+                                            <% orders.forEach(order => { %>
+                                                <tr>
+                                                    <td><%= order._id %></td>
+                                                    <td><%= order.date.toLocaleDateString() %></td>
+                                                    <td><%= order.products[0].status %></td>
+                                                    <td>Rs:<%= order.total_amount %></td>
+                                                    <td>
+                                                        <a href="/order-details?id=<%= order._id %>" class="btn btn-dark view-details">VIEW DETAILS</a>
+                                                    </td>   
+                                                </tr>
+                                            <% }) %>
+                                        <% } else {%>    
+                                        <tr>
+                                            <td class="text-center p-0" colspan="5">
+                                                <p class="mb-5 mt-5">
+                                                    No Order has been made yet.
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                                <hr class="mt-0 mb-3 pb-2" />
+    
+                                <a href="/shop" class="btn btn-dark">Go Shop</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End .tab-content -->
+        </div><!-- End .row -->
+    </div><!-- End .container -->
+
+    <div class="mb-5"></div><!-- margin -->
+</main><!-- End .main -->
+
+<%- include("layout/footer.ejs") %>
+
+

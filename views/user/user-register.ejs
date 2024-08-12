@@ -9,6 +9,10 @@
 									<h2 class="title">Register</h2>
 								</div>
 
+								<% if(locals?.message){ %>
+									<p id="perror" class="alert alert-danger"><%= locals.message %></p>
+								<%  }  %>
+
 								<form action="/user-register" method="post" id="registerForm">
 									<label for="fname">
 										First Name
@@ -112,6 +116,12 @@
 
 			})
 		})
+
+		if(document.getElementById('perror')){
+			setTimeout(() => {
+					document.getElementById('perror').style.display = 'none'
+				}, 4000);
+		}
 	</script>
 
 	<!-- Plugins JS File -->

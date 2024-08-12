@@ -1,0 +1,49 @@
+<%- include('layout/header.ejs') %>
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Reports</h2>
+        </div>
+        <div>
+            <input type="text" placeholder="Search Reports" class="form-control bg-white">
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <form id="reportForm" class="mb-4">
+                        <div class="form-group">
+                            <label for="startDate">Start Date:</label>
+                            <input type="date" id="startDate" name="startDate" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="endDate">End Date:</label>
+                            <input type="date" id="endDate" name="endDate" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="period">Period:</label>
+                            <select id="period" name="period" class="form-control">
+                                <option value="">Custom Range</option>
+                                <option value="1day">Last 1 Day</option>
+                                <option value="1week">Last 1 Week</option>
+                                <option value="1month">Last 1 Month</option>
+                                <option value="1year">Last 1 Year</option>
+                            </select><br>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Generate Report</button>
+                    </form>
+                    <button id="downloadPDF" class="btn btn-secondary mb-2">Download PDF</button>
+                    <button id="downloadExcel" class="btn btn-secondary mb-2">Download Excel</button>
+                </div>
+                <div class="col-md-6">
+                    <div id="reportResults" class="mt-4"></div>
+                </div>
+            </div> <!-- .row // -->
+        </div> <!-- card body .// -->
+    </div> <!-- card .// -->
+</section> <!-- content-main end// -->
+
+<script src="/public/js/adminReport.js"></script>
+
+<%- include('layout/footer.ejs') %>

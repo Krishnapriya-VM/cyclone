@@ -47,7 +47,7 @@
                             <div class="card-body">
                                 <div>
                                     <label for="mainimage">Main Image</label>
-                                    <input type="file" id="mainimage" name="mainimage" class="form-control" >
+                                    <input type="file" id="mainimage" name="mainimage" class="form-control" accept="image/*">
                                     <input type="hidden" id="cropvaluesmain" name="cropvaluesmain">
                                     <br>                                    
                                     <img src="/public/image/<%= locals.product.mainimage %>" alt="..." data-filename="<% locals.product.mainimage %>" style=" height: 80px; width: 80px;"> 
@@ -56,7 +56,7 @@
                                     <div class="preview1" id="preview1" ></div>
                                     <br>
                                     <label for="imgs"> Image</label>
-                                    <input type="file" id="imgs" name="imgs" class="form-control"  multiple>
+                                    <input type="file" id="imgs" name="imgs" class="form-control" accept="image/*" multiple>
                                     <br>
                                     <% for(let i=0; i< locals.product.image.length ; i++) { %>
                                         <img src="/public/image/<%= locals.product.image[i] %>" alt="..." data-filename="<%= locals.product.image[i] %>" style=" height: 80px; width: 80px;"> 
@@ -108,6 +108,6 @@
     </div>
 </section>
 
-<script src="/public/js/product.js"></script>
+<script src="../../public/js/editProduct.js"></script>
 
 <%- include ('layout/footer.ejs') %>
