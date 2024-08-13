@@ -21,8 +21,8 @@ router.get("/user-profile",userAuth.isLoggedIn, userController.loadProfile);
 router.post("/user-profile",userAuth.isLoggedIn, userController.editProfile);
 router.get("/view-orders", userAuth.isLoggedIn, orderController.viewOrder);
 router.get("/order-details", userAuth.isLoggedIn, orderController.orderDetails);
-router.get("/change-password", userAuth.isLoggedIn);
-router.post("/change-password", userAuth.isLoggedIn)
+router.get("/change-password", userAuth.isLoggedIn, userController.loadChangePassword);
+router.post("/change-password", userAuth.isLoggedIn, userController.postChangePassword)
 
 router.get("/user-login", userAuth.isLoggedOut, userController.loadUserLogin);
 router.post("/user-login", userAuth.isLoggedOut, userController.postLogin);
@@ -53,6 +53,10 @@ router.get("/addToCart", userAuth.isLoggedIn, cartController.addToCart);
 router.get("/cart/increment-quantity", userAuth.isLoggedIn, cartController.incrementQuantity)
 router.get("/cart/decrement-quantity", userAuth.isLoggedIn, cartController.decrementQuantity)
 router.get("/cart/deleteCart", userAuth.isLoggedIn, cartController.deleteFromCart)
+
+router.get("/wishlist", userAuth.isLoggedIn, userController.viewWishlist);
+router.get("/add-to-wishlist", userAuth.isLoggedIn, userController.addToWishlist);
+router.get("/delete-from-wislist", userAuth.isLoggedIn, userController.deleteFromWishlist)
 
 router.get("/address", userAuth.isLoggedIn, addressController.loadAddress);
 router.get("/address/add-address", userAuth.isLoggedIn, addressController.loadAddAddress);

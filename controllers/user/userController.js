@@ -358,6 +358,45 @@ const editProfile = async (req, res) =>{
   }
 }
 
+const loadChangePassword = async(req, res) =>{
+  try{
+    const userid = req.userid
+    const user = await User.findById(userid);
+    console.log(user);
+    res.render('user/changePassword',{user})
+  }catch(error){
+    console.log(error.message)
+  }
+}
+
+const postChangePassword = async(req, res) =>{
+  try {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+    const userid = req.userid;
+    const user = await User.findById(userid);
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+
+    if(!isMatch){
+      return res.status(400).json({error: "Current password is incorrect"});
+    }
+
+    if(newPassword !== confirmPassword){
+      return res.status(400).json({error: "New passwords do not match"})
+    }
+
+    const hashedPassword = await securePassword(newPassword);
+    user.password = hashedPassword;
+    await user.save();
+
+    res.status(200).json({message: "Password updated successfully"});
+
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({error: "Server error"})
+  }
+}
+
 const loadUser404Page = async (req, res) => {
   try {
     res.render("user/user404");
@@ -485,7 +524,7 @@ const postForgot = async (req,res)=>{
     res.status(500).json({ error: 'Internal Server Error'});
   }
 }
-
+ 
 const viewProduct = async (req, res) => {
 
   try {
@@ -512,6 +551,70 @@ const viewShop = async (req, res) => {
 
 }
 
+const viewWishlist = async(req, res) =>{
+  try{
+      const userid = req.userid;
+      const udata = await User.findById({ _id:userid}).populate("wishlist.product_id");
+      console.log(udata);
+      res.render('user/wishlist', {udata});
+  }catch(error)   {
+      console.log(error.message);
+  }
+}
+
+const addToWishlist = async(req, res) =>{
+  try {
+    const uid = req.userid;
+    const { id} = req.query;
+    const isExist = await User.find({ _id: uid, "wishlist.product_id": id});
+    if(isExist.length === 0){
+        const pdata = await Product.findById({ _id: id});
+        // if(pdata.stock === 0){
+        //     res.json({err: "Out of Stock!"})
+        // }
+        // else if(qty > pdata.stock){
+        //     res.json({err: `Only ${pdata.stock} Items left!!`})
+        // }
+      
+            const updatedCart = await User.findByIdAndUpdate(
+                {_id: uid},
+                {$addToSet: {wishlist: {product_id: id}}},
+                {new: true}
+            );
+            if(updatedCart){
+                res.json({data: "Item Added to Wishlist!"})
+            }else{
+                res.json({err: "Failed to Add Item"})
+            }
+        
+    }else{
+        res.json({err: "Item Already Exist!!"})
+    }
+  } catch (error) {
+      console.log(error.message)
+  }
+}
+
+const deleteFromWishlist = async (req, res) =>{
+  try {
+      const userid = req.userid;
+      const {id} = req.query;
+      console.log("User, PROID",userid,id);
+      const deleteItem = await User.findByIdAndUpdate(
+          {_id: userid},
+          {$pull: {wishlist: {product_id: id}}}
+      )
+      if(deleteItem){
+          res.json({data: "Item removed from Wishlist!!"})
+      }else{
+          res.json({err: "Failed to remove item!!"})
+      }
+  } catch (error) {
+      console.log(error.message);
+  }
+
+}
+
 module.exports = {
   loadHomePage,
   //getProfile,
@@ -526,6 +629,8 @@ module.exports = {
   postLogin,
   loadProfile,
   logOut,
+  loadChangePassword,
+  postChangePassword,
   loadUser404Page,
   loadResetLink,
   loadForgotPassword,
@@ -536,5 +641,8 @@ module.exports = {
   postResetOtp,
   viewProduct,
   viewShop,
-  editProfile
+  editProfile,
+  viewWishlist,
+  addToWishlist,
+  deleteFromWishlist
 };

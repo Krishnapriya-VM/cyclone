@@ -150,9 +150,9 @@
                                                     <div class="product-action">
                                                         <a href="wishlist.html" class="btn-icon-wish" title="wishlist"><i
                                                                 class="icon-heart"></i></a>
-                                                        <a href="product.html" class="btn-icon btn-add-cart"><i
-                                                                class="fa fa-arrow-right"></i>
-                                                                <span>ADD TO CART</span></a>
+                                                        <button href="" class="btn-icon btn-add-cart" id="addToCart" data-productid="<%= locals.product[i]._id %>"><i
+                                                                class="fa fa-arrow-right" ></i>
+                                                                <span>ADD TO CART</span></button>
                                                         <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View"><i class="fas fa-external-link-alt"></i></a>
                                                     </div>
                                                 </div>
@@ -447,5 +447,59 @@
             <!-- margin -->
         </main>
         <!-- End .main -->
+
+        <script>
+    
+    const addToCartButtons = document.querySelectorAll(".btn-add-cart");
+
+    // Loop through each button and add the event listener
+    addToCartButtons.forEach(function(button) {
+        button.addEventListener('click', function(e) {
+
+            // Retrieve the product ID from the data attribute
+            let proid = this.dataset.productid;
+            console.log("Product ID:", proid);
+
+            // Add the product to the cart (this function should be defined)
+            addCart(proid, 1);
+        });
+    });
+
+function addCart(proid, qty) {
+    fetch(`/addToCart?id=${proid}&qty=${qty}`)
+    .then(res => res.json())
+    .then(data => {
+        if(data.data){
+            Swal.fire({
+                title: data.data,
+                icon: "success",
+                confirmButtonText: "OK"
+            }).then(res => {
+                if(res.isConfirmed){
+                    window.location.reload();
+                }
+            });
+        } else if(data.err) {
+            Swal.fire({
+                title: data.err,
+                icon: "error",
+                confirmButtonText: "OK"
+            }).then(res => {
+                if(res.isConfirmed){
+                    window.location.reload();
+                }
+            });
+        } else if(data.stockerr) {
+            Swal.fire({
+                title: data.stockerr,
+                icon: "info"
+            });
+        }
+    });
+}
+
+
+
+        </script>
         
 <%- include("layout/footer.ejs") %>

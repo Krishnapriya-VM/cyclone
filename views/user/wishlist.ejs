@@ -38,37 +38,44 @@
                             <th class="action-col">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="product-row">
-                            <td>
-                                <figure class="product-image-container">
-                                    <a href="product.html" class="product-image">
-                                        <img src="assets/images/products/product-4.jpg" alt="product">
-                                    </a>
-    
-                                    <a href="#" class="btn-remove icon-cancel" title="Remove Product"></a>
-                                </figure>
-                            </td>
-                            <td>
-                                <h5 class="product-title">
-                                    <a href="product.html">Men Watch</a>
-                                </h5>
-                            </td>
-                            <td class="price-box">$17.90</td>
-                            <td>
-                                <span class="stock-status">In stock</span>
-                            </td>
-                            <td class="action">
-                                <a href="ajax/product-quick-view.html" class="btn btn-quickview mt-1 mt-md-0"
-                                    title="Quick View">Quick
-                                    View</a>
-                                <button class="btn btn-dark btn-add-cart product-type-simple btn-shop">
-                                    ADD TO CART
-                                </button>
-                            </td>
-                        </tr>
-    
-                    </tbody>
+                    <% for(let i = 0; i < locals.udata.wishlist.length; i++) {%>
+                        <tbody>
+                            <tr class="product-row">
+                                <td>
+                                    <figure class="product-image-container">
+                                        <a href="product.html" class="product-image">
+                                            <img src="public/image/<%= locals.udata.wishlist[i].product_id.mainimage %>" alt="product">
+                                        </a>
+        
+                                        <button class="crossbtn" data-proid="<%= locals.udata.wishlist[i].product_id._id %>" >x</button>
+                                    </figure>
+                                </td>
+                                <td>
+                                    <h5 class="product-title">
+                                        <a href="product.html"><%= locals.udata.wishlist[i].product_id.productname %></a>
+                                    </h5>
+                                </td>
+                                <td class="price-box"><%= locals.udata.wishlist[i].product_id.price %></td>
+                                <td>
+                                    <span class="stock-status"data-stock="<%= locals.udata.wishlist[i].product_id.stock %>">
+                                        <% if(locals.udata.wishlist[i].product_id.stock > 0) { %>
+                                        In Stock 
+                                    <% }else{ %>
+                                            Out of Stock
+                                    <% } %>
+                                    </span>
+                                </td>
+                                <td class="action">
+                                    <a href="/productdetails?id=<%= locals.udata.wishlist[i].product_id._id  %>" class="btn  mt-1 mt-md-0"
+                                        title="Quick View">Quick View</a>
+                                    <button class="btn btn-dark btn-add-cart product-type-simple btn-shop" data-proid="<%= locals.udata.wishlist[i].product_id._id %>">
+                                        ADD TO CART
+                                    </button>
+                                </td>
+                            </tr>
+        
+                        </tbody>
+                    <% } } %>
                 </table>
             </div>
 
@@ -77,5 +84,57 @@
     </div><!-- End .container -->
 </main>
 
+<script src="/public/js/wishlist.js"></script>
+<script>
+    // JavaScript for handling Add to Cart button click
+    document.addEventListener('DOMContentLoaded', function () {
+        const addToCartButtons = document.querySelectorAll('.btn-add-cart');
+
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', async function () {
+                const productRow = this.closest('.product-row');
+                const stockStatus = productRow.querySelector('.stock-status').dataset.stock;
+
+                if (stockStatus > 0) {
+                    // If the product is in stock, proceed to add to cart
+                    try {
+                        const response = await fetch('/addToCart', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                productId: this.dataset.proid
+                            })
+                        });
+
+                        if (response.ok) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Added to cart',
+                                text: 'Product has been added to your cart!',
+                            });
+                        } else {
+                            throw new Error('Failed to add to cart');
+                        }
+                    } catch (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Something went wrong. Please try again later.',
+                        });
+                    }
+                } else {
+                    // If the product is out of stock, show out of stock alert
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Out of stock',
+                        text: 'This product is currently out of stock.',
+                    });
+                }
+            });
+        });
+    });
+</script>
 
 <%- include("layout/footer.ejs") %>
