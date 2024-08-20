@@ -1,4 +1,4 @@
-const removebtn = document.querySelectorAll('.crossbtn')
+const removebtn = document.querySelectorAll('.wastebtn')
 
 async function deleteWishlist(proid)
 {
@@ -63,3 +63,49 @@ removebtn.forEach(element =>{
         
     })
 })
+
+const addToCartButtons = document.querySelectorAll(".btn-add-cart");
+
+        
+        addToCartButtons.forEach(function(button) {
+            button.addEventListener('click', function(e) {
+
+                let proid = this.dataset.productid;
+                console.log("Product ID:", proid);
+
+                addCart(proid, 1);
+            });
+        });
+
+        function addCart(proid, qty) {
+            fetch(`/addToCart?id=${proid}&qty=${qty}`)
+            .then(res => res.json())
+            .then(data => {
+                if(data.data){
+                    Swal.fire({
+                        title: data.data,
+                        icon: "success",
+                        confirmButtonText: "OK"
+                    }).then(res => {
+                        if(res.isConfirmed){
+                            window.location.reload();
+                        }
+                    });
+                } else if(data.err) {
+                    Swal.fire({
+                        title: data.err,
+                        icon: "error",
+                        confirmButtonText: "OK"
+                    }).then(res => {
+                        if(res.isConfirmed){
+                            window.location.reload();
+                        }
+                    });
+                } else if(data.stockerr) {
+                    Swal.fire({
+                        title: data.stockerr,
+                        icon: "info"
+                    });
+                }
+            });
+        }

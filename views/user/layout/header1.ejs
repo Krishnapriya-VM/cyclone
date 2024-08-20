@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 <head>
 	<meta charset="UTF-8">
@@ -40,14 +39,81 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <style>
-        .crossbtn{
+
+        .remove-btn {
             background-color: white;
-            border:none;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.13);
-            border-radius: 50%;
-            padding: 0px 6px 0px  6px;            
+            border: none;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.15); 
+            border-radius: 200%;
+            padding: 4px; 
+            width: 24px;
+            height: 24px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: absolute;
+            top: -8px;
+            right: -8px;
+        }
+
+        .remove-btn::before {
+            content: '✕'; 
+            font-size: 10px; 
+            color: #000000; 
+            font-weight: 900; 
+            line-height: 1;
+        }
+
+        .minusbtn {
+            width: 40px; 
+            height: 48px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 0; 
+            margin: 0;
+        }
+
+        .plusbtn {
+            width: 40px; 
+            height: 48px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 0; 
+            margin: 0;
+        }
+
+        .qtyvalue{
+            width: 60px; 
+            height: 40px; 
+            text-align: center; 
+            background-color: white; 
+            padding: 0; 
+            margin: 0;
+        }
+
+    </style>
+
+    <style>
+        .btn-quick-view {
+            background-color: #f4f4f4;
+            color: black;
+            border: 1px solid #f8f9fa00;
+            padding: 0.375rem 0.75rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease-in-out;
+            font-weight: 500;
+        }
+
+        .btn-quick-view:hover {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
         }
     </style>
+
 	<style>
         /* Include the CSS code here */
         input[type=number]::-webkit-outer-spin-button,
@@ -56,6 +122,35 @@
             margin: 0;
         }
 
+    </style>
+
+    <style>
+        .wastebtn {
+            background-color: white;
+            border: none;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.15);
+            border-radius: 50%;
+            padding: 6px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .wastebtn i {
+            color: #d9534f; /* Bootstrap's danger color for the trash icon */
+            font-size: 16px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px; /* Adjust the gap as needed */
+            align-items: center;
+            justify-content: center;
+            height: 135px;
+        }
 
     </style>
 
@@ -338,7 +433,7 @@
                             <li>
                                 <a href="#">Profile</a>
                                 <ul>
-                                    <li><a href="wishlist.html">Wishlist</a></li>
+                                    <li><a href="/wishlist">Wishlist</a></li>
                                     <li><a href="/cart">Shopping Cart</a></li>
                                     <li><a href="/checkout">Checkout</a></li>
                                     <li><a href="/user-profile">Dashboard</a></li>

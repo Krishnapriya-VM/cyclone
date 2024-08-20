@@ -1,7 +1,7 @@
 const quantity = document.querySelectorAll('.qtyvalue');
 const minusbtn = document.querySelectorAll('.minusbtn');
 const plusbtn = document.querySelectorAll('.plusbtn');
-const removebtn = document.querySelectorAll('.crossbtn')
+const removebtn = document.querySelectorAll('.remove-btn')
 
 
 minusbtn.forEach(element => {

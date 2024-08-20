@@ -40,8 +40,8 @@
                                                         <img src="public/image/<%= locals.udata.cart[i].product_id.mainimage %>" alt="product">
                                                     </a>
                                                     
-                                                    <button class="crossbtn"   data-proid="<%= locals.udata.cart[i].product_id._id %>" >x</button>
-                                                    <!-- <a href="#" class="btn-remove icon-cancel" title="Remove Product"></a> -->
+                                                    <button class="remove-btn"   data-proid="<%= locals.udata.cart[i].product_id._id %>" title="Delete"></button>
+                                                   
                                                 </figure>
                                             </td>
                                             <td class="product-col">
@@ -53,7 +53,7 @@
                                             <td>
                                                 <div class="product-single-qty d-flex">
 													<button class="minusbtn border-light rounded-1 px-4 btn" data-proid="<%= locals.udata.cart[i].product_id._id %>">-</button>
-                                                    <input class="form-control qtyvalue m-0"  type="number" value="<%= locals.udata.cart[i].quantity %>">
+                                                    <input class="form-control qtyvalue m-0"  type="number" value="<%= locals.udata.cart[i].quantity %>" readonly style="background-color: white;">
 													<button class="plusbtn border-light rounded-1 px-4 btn" data-proid="<%= locals.udata.cart[i].product_id._id %>">+</button>
                                                 </div><!-- End .product-single-qty -->
                                             </td>

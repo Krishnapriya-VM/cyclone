@@ -49,8 +49,6 @@ addToCart.addEventListener('click', function(){
 
 const addToWishlist = document.getElementById("addToWishlist")
 
-
-
 function addWishlist(proid){
     fetch(`/add-to-wishlist?id=${proid}`)
     .then(res =>{

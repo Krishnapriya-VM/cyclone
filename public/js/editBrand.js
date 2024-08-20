@@ -64,7 +64,7 @@ brandform.addEventListener('submit', (e) => {
     
 
     if (error1.innerHTML !== "" || error2.innerHTML !== "") {
-        console.log('ADDED BRAND');
+        console.log('EDITED BRAND');
         e.preventDefault();
     }
 });
@@ -172,7 +172,7 @@ if (unlistBtn) {
     });
 }
 
-if (listBtn) {
+if (listBtn) { 
     listBtn.forEach(btn => {
         btn.addEventListener('click', () => {
             const brandid = btn.dataset.uid;
