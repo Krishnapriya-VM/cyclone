@@ -1,6 +1,7 @@
 const title = document.getElementById('offertitle')
 const description = document.getElementById('offerdescription')
 const percentage = document.getElementById('percentage')
+const status = document.getElementById('status')
 const offerform = document.getElementById('offerform')
 const error1 = document.getElementById('error1')
 const error2 = document.getElementById('error2')
@@ -79,22 +80,25 @@ percentage.addEventListener('keyup',()=>{
     validateDiscount(discountdata)
 })
 percentage.addEventListener('blur',()=>{
-    const discountdata = percentage.value
+    const discountdata = percentage.value 
     validateDiscount(discountdata)
 })
 
 
-async function addOffer(namedata, descdata, discountdata){
+async function addOffer(namedata, descdata, discountdata, statusdata){
     try {
-        const formdata = new FormData();
-        formdata.append('offertitle', namedata)
-        formdata.append('offerdescription', descdata)
-        formdata.append('percentage', discountdata)
-        console.log(namedata, descdata, discountdata);
-
+        
         const res = await fetch('/admin/offers', {
             method: 'POST',
-            body: formdata
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                offertitle: namedata,
+                offerdescription: descdata,
+                percentage: discountdata,
+                status: statusdata
+            })
         })
         const data = await res.json()
         console.log(data);
@@ -116,14 +120,15 @@ offerform.addEventListener('submit', (e) => {
     const namedata = title.value;
     const descdata = description.value;
     const discountdata = percentage.value;
+    const statusdata = status.value;
 
     validateTitle(namedata);
     validateDescription(descdata);
     validateDiscount(discountdata)
 
-    if (error1.innerHTML === "" || error2.innerHTML === "") {
+    if (error1.innerHTML === "" || error2.innerHTML === "" || error3.innerHTML === "") {
         console.log('OFFER ADDED');
-        addOffer(namedata, descdata, discountdata)
+        addOffer(namedata, descdata, discountdata, statusdata)
     }
 });
 

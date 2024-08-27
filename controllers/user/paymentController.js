@@ -11,6 +11,10 @@ const paymentConfirm = async(req, res) =>{
         console.log("body",req.body);
         const {payment_method, address_id, subtotal, items} = req.body;
 
+        if (payment_method === "COD" && subtotal > 1000) {
+          return res.status(400).json({ message: "COD is not allowed for orders above 1000." });
+        }
+
         let products = []
         for(let item of items){
             const productdata = await Product.findById({_id:item.product_id})

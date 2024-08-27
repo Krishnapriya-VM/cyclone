@@ -6,6 +6,8 @@ const categoryController = require('../controllers/admin/categoryController');
 const brandController = require("../controllers/admin/brandController")
 const productController = require("../controllers/admin/productController")
 const couponController = require("../controllers/admin/couponController")
+const offerController = require("../controllers/admin/offerController")
+const bannerController = require("../controllers/admin/bannerController") 
 
 const adminController = require("../controllers/admin/adminController");
 const orderController = require("../controllers/admin/orderController");
@@ -32,6 +34,20 @@ router.post("/brand", adminAuth.isLoggedIn, upload.single("brand_image"), brandC
 router.get("/editBrand", adminAuth.isLoggedIn, brandController.loadEditBrand);
 router.post("/editBrand", adminAuth.isLoggedIn, upload.single("brand_image"), brandController.postEditBrand);
 router.get("/unlist-and-list-brands/:brandid", adminAuth.isLoggedIn, brandController.listBrand)
+
+router.get("/banner", adminAuth.isLoggedIn, bannerController.loadBanner);
+router.post("/banner", adminAuth.isLoggedIn, upload.single("banner_image"), bannerController.addBanner);
+
+router.get("/editBanner", adminAuth.isLoggedIn, bannerController.loadEditBanner);
+router.post("/editBanner", adminAuth.isLoggedIn, upload.single("banner_image"), bannerController.postEditBanner);
+router.get("/unlist-and-list-banners/:bannerid", adminAuth.isLoggedIn, bannerController.listBanner)
+
+router.get("/offers", adminAuth.isLoggedIn, offerController.loadOffer);
+router.post("/offers", adminAuth.isLoggedIn, offerController.addOffer);
+
+router.get("/edit-offer", adminAuth.isLoggedIn, offerController.loadEditOffer);
+router.post("/edit-offer", adminAuth.isLoggedIn, offerController.postEditOffer);
+router.get("/unlist-and-list-offers/:offerid", adminAuth.isLoggedIn, offerController.listOffer)
 
 router.get('/products',adminAuth.isLoggedIn, productController.viewProducts)
 router.get("/addproducts", adminAuth.isLoggedIn, productController.loadProducts);

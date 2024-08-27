@@ -2,13 +2,26 @@ const User = require("../../models/userModel");
 
 const loadUserList = async(req, res) =>{
     try {
-        const udata = await User.find({isAdmin:0})
-        res.render('admin/user-list',{udata})
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10; // You can adjust the default limit
+        const skip = (page - 1) * limit;
+
+        const totalItems = await User.countDocuments({ isAdmin: 0 });
+        const udata = await User.find({isAdmin:0}).skip(skip).limit(limit);
+
+        const totalPages = Math.ceil(totalItems / limit);
+        res.render('admin/user-list',{
+            udata,
+            currentPage: page,
+            totalPages,
+            limit
+            })
     } catch (error) {
         console.log(error.message);
     }
 }
-
+ 
 const userBlockAndUnBlock = async(req, res) => {
     try {
         const {id} = req.query;

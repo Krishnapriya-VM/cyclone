@@ -9,11 +9,11 @@ const loadBrand = async(req, res)=>{
         if(brand_details != null){
             res.render("admin/brand" , {data: brand_details})
         }else{
-            res.render("admin/category")
+            res.render("admin/brand") 
         }
     }catch(error){
         console.log(error.message);
-        res.render("admin/category", {message: "ERROR! Please try again."})
+        res.render("admin/brand", {message: "ERROR! Please try again."})
     }
 };
 

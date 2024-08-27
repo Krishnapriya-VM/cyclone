@@ -2,12 +2,22 @@ const Order = require("../../models/orderModel");
 
 const getOrders = async(req, res) =>{
     try {
-        const orders = await Order.find().populate('userid address_id products.product_id');
-        if (orders.length > 0) {
-            res.render('admin/orders', { orders });
-        } else {
-            res.render('admin/no-orders');
-        }
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10; 
+
+        const totalOrders = await Order.countDocuments();
+        const totalPages = Math.ceil(totalOrders / limit);
+
+        const orders = await Order.find().populate('userid address_id products.product_id').skip((page - 1) * limit).limit(limit);
+        
+        res.render('admin/orders', { 
+            orders,
+            currentPage: page, 
+            totalPages, 
+            limit
+        });
+        
     } catch (error) {
         res.status(500).send('Error fetching orders');
     }

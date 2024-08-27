@@ -100,6 +100,20 @@
                                     </select>        
                                     <p class="perror mb-2" id="catError" style="display: none; color: red;"></p>                                    
                                 </div>
+
+                                <div class="mb-4">
+                                    <label for="offername" class="form-label">Offers</label>
+                                    <select name="offername" class="form-control" id="offername">
+                                        <% if(locals.product?.offer_id){ %>
+                                        <option value="<%= locals.product?.offer_id?._id %>"><%= locals.product?.offer_id?.offertitle %></option>
+                                        <% } %>
+                                        <% if(locals.offer?.length > 0) { for(let i = 0 ; i < locals.offer.length ; i ++) { %>
+                                            <% if( locals.product?.offer_id?.offertitle !== locals.offer[i]?.offertitle ) {%>
+                                            <option value="<%= locals.offer[i]?._id %>"><%= locals.offer[i]?.offertitle %></option>
+                                        <% } } } %>
+                                    </select>        
+                                    <p class="perror mb-2" id="offerError" style="display: none; color: red;"></p>                                    
+                                </div>
                             </div>
                         </div> <!-- card end// -->
                     </div>

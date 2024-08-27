@@ -1,7 +1,8 @@
 const title = document.getElementById('offertitle')
 const description = document.getElementById('offerdescription')
 const percentage = document.getElementById('percentage')
-const offerform = document.getElementById('offerform')
+const status = document.getElementById('status')
+const editofferform = document.getElementById('editofferform')
 const error1 = document.getElementById('error1')
 const error2 = document.getElementById('error2')
 const error3 = document.getElementById('error3')
@@ -84,48 +85,54 @@ percentage.addEventListener('blur',()=>{
 })
 
 
-async function editOffer(namedata, descdata, discountdata){
-    try {
-        const formdata = new FormData();
-        formdata.append('offertitle', namedata)
-        formdata.append('offerdescription', descdata)
-        formdata.append('percentage', discountdata)
-        console.log(namedata, descdata, discountdata);
+// async function editOffer(namedata, offerid, descdata, discountdata, statusdata){
+//     try {
 
-        const res = await fetch('/admin/edit-offers', {
-            method: 'POST',
-            body: formdata
-        })
-        const data = await res.json()
-        console.log(data);
-        if(data.message){
-            document.getElementById('success_mess').style.display = 'block'
-            document.getElementById('success_mess').innerHTML = data.message;
-            setTimeout(() =>{
-                window.location.href = '/admin/offers'
-            }, 1000) 
-        }
-    } catch (error) {
-      console.log(error.message);  
-    }
-}
+//         const res = await fetch(`/admin/edit-offer?id=${offerid}`, {
+//             method: 'POST',
+//             headers:{
+//                 'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify({
+//                 title: namedata,
+//                 description: descdata,
+//                 percentage: discountdata,
+//                 status: statusdata
+//             })
+//         })
+//         const data = await res.json()
+//         console.log(data);
+//         if(data.message){
+//             document.getElementById('success_mess').style.display = 'block'
+//             document.getElementById('success_mess').innerHTML = data.message;
+//             setTimeout(() =>{
+//                 window.location.href = '/admin/offers'
+//             }, 1000) 
+//         }
+//     } catch (error) {
+//       console.log(error.message);  
+//     }
+// }
 
-offerform.addEventListener('submit', (e) => {
-    e.preventDefault();
+// editofferform.addEventListener('submit', (e) => {
+//     e.preventDefault();
 
-    const namedata = title.value;
-    const descdata = description.value;
-    const discountdata = percentage.value;
+//     const namedata = title.value;
+//     const descdata = description.value;
+//     const discountdata = percentage.value;
+//     const statusdata = status.value;
 
-    validateTitle(namedata);
-    validateDescription(descdata);
-    validateDiscount(discountdata)
+//     const offerid = document.getElementById('offerid').value
 
-    if (error1.innerHTML === "" || error2.innerHTML === "") {
-        console.log('OFFER EDITED');
-        editOffer(namedata, descdata, discountdata)
-    }
-});
+//     validateTitle(namedata);
+//     validateDescription(descdata);
+//     validateDiscount(discountdata)
+
+//     if (error1.innerHTML === "" || error2.innerHTML === "" || error3.innerHTML === "") {
+//         console.log('OFFER EDITED');
+//         editOffer(namedata, offerid, descdata, discountdata, statusdata)
+//     }
+// });
 
 //List and Unlist Offer
 const unlistBtn = document.querySelectorAll(".unlistbtn");

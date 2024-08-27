@@ -2,10 +2,10 @@
 <section class="content-main">
     <div class="content-header">
         <div>
-            <h2 class="content-title card-title">Brands </h2>
+            <h2 class="content-title card-title">Banners </h2>
         </div>
         <div>
-            <input type="text" placeholder="Search Brands" class="form-control bg-white">
+            <input type="text" placeholder="Search Banners" class="form-control bg-white">
         </div>
     </div>
     <div class="card">
@@ -16,10 +16,10 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-3">
-                    <form id="brandform" enctype="multipart/form-data">
+                    <form id="bannerform" enctype="multipart/form-data">
                         <div class="mb-4">
-                            <label for="brandName" class="form-label">Name</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="brand_name" name="brand_name">
+                            <label for="bannerName" class="form-label">Name</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="banner_name" name="banner_name">
                             <p class="perror mb-2" id="error1" style="display: none; color: red;"></p>
                         </div>
                         <div class="mb-4">
@@ -32,7 +32,7 @@
                         <div class="mb-4">
                                 <div>
                                     <label for="img1"> Image</label>
-                                    <input type="file" id="brand_image" name="brand_image" class="form-control" accept="image/*">
+                                    <input type="file" id="banner_image" name="banner_image" class="form-control" accept="image/*">
                                     <br>
                                     <div class="row col-md-4" >
                                         <img id="imagePreview" src="#" alt="Preview" style="display: none;  max-width: 100px; max-height: 100px;">
@@ -42,7 +42,7 @@
                                 </div>
                         </div>
                         <div class="d-grid">
-                            <button class="btn btn-primary">Create brand</button>
+                            <button class="btn btn-primary">Create Banner</button>
                         </div>
                     </form>
                 </div>
@@ -62,7 +62,7 @@
                                 <% if(locals.data && locals.data.length > 0) {  for(var i = 0; i < locals.data.length; i++) {%>
                                     <tr>
                                         <th><img src="/public/image/<%= locals.data[i].image %>" style="height: 50px; width: 50px;" ></th>
-                                        <th><%= locals.data[i].brandname %></th>
+                                        <th><%= locals.data[i].bannername %></th>
                                         <% if(locals.data[i].isListed === 0) { %>
                                             <td><span class="badge rounded-pill alert-success">Active</span></td>
                                         <% }else{ %>
@@ -76,7 +76,7 @@
                                         <% } %>
 
                                         <td class="text-center">
-                                            <a href="/admin/editBrand?id=<%= locals.data[i]._id %>">
+                                            <a href="/admin/editBanner?id=<%= locals.data[i]._id %>">
                                             <button class="btn btn-sm btn-brand">Edit</button></a>
                                                 <% if(locals.data[i].isListed === 0) { %>
                                                     <button class="btn btn-sm btn-brand rounded font-sm unlistbtn" data-uid="<%= locals.data[i]._id %>">Unlist</button>
@@ -86,7 +86,7 @@
                                         </td>
                                     </tr>
                                 <% } }else{  %>
-                                    <h2>No brands found!!</h2>
+                                    <h2>No banners found!!</h2>
                                     <% } %>
                             </thead>
                         </table>
@@ -97,7 +97,7 @@
     </div> <!-- card .// -->
 </section> <!-- content-main end// -->
 
-<script src="/public/js/brand.js"></script>
+<script src="/public/js/banner.js"></script>
 
 
 <%- include('layout/footer.ejs') %>

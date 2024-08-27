@@ -1,12 +1,12 @@
 const express = require("express");
-require("doteenv").config()
-const connectDB = require('./configurations/config')
+require("dotenv").config();
+const connectDB = require('./configurations/config');
 const path = require("path");
 const session = require("express-session");
-const nocache = require('nocache')
-const cookieParser = require("cookie-parser")
+const nocache = require('nocache');
+const cookieParser = require("cookie-parser");
 const {usererrorHandler} = require('./middleware/usererrorHandler');
-const {adminerrorHandler} = require('./middleware/adminErrorHandler')
+const {adminerrorHandler} = require('./middleware/adminErrorHandler');
 
 require('./utils/passportConfig')
 const passport = require('passport')

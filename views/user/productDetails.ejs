@@ -20,11 +20,11 @@
                         <div class="col-lg-5 col-md-6 product-single-gallery">
                             <div class="product-slider-container">
                                 <div class="label-group">
-                                    <div class="product-label label-hot">HOT</div>
+                                    <!-- <div class="product-label label-hot">HOT</div> -->
 
-                                    <div class="product-label label-sale">
-                                        -16%
-                                    </div>
+                                    <% if(locals.product?.offer_id) {%>
+                                        <div class="product-label label-hot">-<%= locals.product.offer_id.discount %>% OFF</div>
+                                        <% } %>
                                 </div>
 
                                 <div class="product-single-carousel owl-carousel owl-theme show-nav-hover">

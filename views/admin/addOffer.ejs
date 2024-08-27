@@ -16,7 +16,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-3">
-                    <form method="post" id="offerform" action="/admin/offer" >
+                    <form method="post" id="offerform" action="/admin/offers" >
                         <div class="mb-4">
                             <label for="offertitle" class="form-label">Title</label>
                             <input type="text" placeholder="Type here" class="form-control" id="offertitle" name="offertitle">
@@ -52,6 +52,7 @@
                                     <th></th>
                                     <th>Title</th>
                                     <th>Status</th>
+                                    <th></th>
                                     <th>Discount</th>
                                     <th class="text-center">Action</th>
                                     
@@ -62,15 +63,20 @@
                                 <% if(locals.offerdata && locals.offerdata.length > 0) {for (var i = 0; i < locals.offerdata.length; i++) { %>
                                 <tr>
                                     <th></th>
-                                    <th><%= locals.offerdata[i].offertitle  %></th>
+                                    <th><%= locals.offerdata[i].offertitle %></th>
                                     <% if(locals.offerdata[i].status === 1) { %>
                                         <td><span class="badge rounded-pill alert-success">Active</span></td>
                                     <% }else{ %>
                                         <td><span class="badge rounded-pill alert-warning">Inactive</span></td>
                                     <% } %>
-                                    <th><%= locals.offerdata[i].percentage%></th>
+
+                                    <% if(locals.offerdata[i].status === 1) { %>
+                                        <td><span class="badge rounded-pill alert-success">Listed</span></td>
+                                    <% }else{ %>
+                                        <td><span class="badge rounded-pill alert-warning">Unlisted</span></td>
+                                    <% } %>
+                                    <th><%= locals.offerdata[i].discount%></th>
                                     <td class="text-center">
-                                    <td>
 
                                         <a  href="/admin/edit-offer?id=<%= locals.offerdata[i]._id  %>">
                                         <button class="btn btn-sm btn-brand rounded font-sm">Edit</button></a>
@@ -80,7 +86,7 @@
                                             <button class="btn btn-sm btn-brand rounded font-sm listbtn" data-uid="<%= locals.offerdata[i]._id %>">List</button>
                                         <% } %>
                                           
-                                    </td>
+                                    </td> 
                                 </tr>
                                 <% } }else{ %>
                                     <h2>No offers found!!</h2>

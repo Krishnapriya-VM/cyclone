@@ -3,6 +3,7 @@ const addProductForm = document.getElementById('addProductForm')
 const productname = document.getElementById('productname')
 const procategory = document.getElementById('procategory')
 const brandname = document.getElementById('brandname')
+const offername = document.getElementById('offername')
 const stock = document.getElementById('stock')
 const price = document.getElementById('price')
 const description = document.getElementById('description')
@@ -17,6 +18,7 @@ const error6 = document.getElementById('error6')
 const error7 = document.getElementById('error7')
 const priceError = document.getElementById('priceError')
 const catError = document.getElementById('catError')
+const offerError = document.getElementById('offerError')
 const stockerr = document.getElementById('stockerr')
 
 function pname(name)
@@ -56,6 +58,20 @@ function brandVal(name)
     else{
         brandError.innerHTML = ""
         brandError.style.display = "none"
+    }
+}
+
+function offerVal(name)
+{
+    console.log(name);
+    if(name.trim() === "")
+        {
+        offerError.innerHTML = "Please select Offer!";
+        offerError.style.display = "block";
+    }
+    else{
+        offerError.innerHTML = "";
+        offerError.style.display = "none";
     }
 }
 
@@ -186,6 +202,16 @@ brandname.addEventListener('blur', () => {
     brandVal(fdata);
 })
 
+offername.addEventListener('change', () => {
+    const fdata = offername.value;
+    offerVal(fdata);
+})
+
+offername.addEventListener('blur', () => {
+    const fdata = offername.value;
+    offerVal(fdata);
+})
+
 stock.addEventListener('keyup',()=>{
     const fdata = stock.value
     stockVal(fdata)
@@ -238,6 +264,7 @@ addProductForm.addEventListener('submit',(e)=>{
     const ddata = description.value
     const catdata = procategory.value
     const bdata = brandname.value;
+    const offdata = offername.value;
     const prdata = price.value
     const sdata = stock.value
     const mdata = main.files.length
@@ -260,8 +287,9 @@ addProductForm.addEventListener('submit',(e)=>{
     catval(catdata)
     descVal(ddata)
     brandVal(bdata)
+    offerVal(offdata)
 
-    if(productNameError.innerHTML !== "" || brandError.innerHTML !== "" || descError.innerHTML !=="" || error6.innerHTML !=="" || error7.innerHTML !==""|| priceError.innerHTML !==""|| catError.innerHTML !==""|| stockerr.innerHTML !=="" )
+    if(productNameError.innerHTML !== "" || brandError.innerHTML !== "" || descError.innerHTML !=="" || error6.innerHTML !=="" || error7.innerHTML !==""|| priceError.innerHTML !==""|| catError.innerHTML !==""|| stockerr.innerHTML !=="" || offerError.innerHTML !== "")
     {
         console.log("PRO");
         e.preventDefault()

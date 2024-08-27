@@ -2,10 +2,10 @@
 <section class="content-main">
     <div class="content-header">
         <div>
-            <h2 class="content-title card-title">Edit Brands </h2>
+            <h2 class="content-title card-title">Edit Banners </h2>
         </div>
         <div>
-            <input type="text" placeholder="Search Brands" class="form-control bg-white">
+            <input type="text" placeholder="Search Banners" class="form-control bg-white">
         </div>
     </div>
     <div class="card">
@@ -15,14 +15,14 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-3">
-                    <form method="post" id="brandform" action="/admin/editBrand" enctype="multipart/form-data">
-                        <% if(locals.brand_data) { %>
+                    <form method="post" id="bannerform" action="/admin/editBanner" enctype="multipart/form-data">
+                        <% if(locals.banner_data) { %>
                             <div class="mb-4">
-                                <label for="brandName" class="form-label">Name</label>
-                                <input type="text" placeholder="Type here" value="<%= locals.brand_data.brandname %>" class="form-control" id="brand_name" name="brand_name">
+                                <label for="bannerName" class="form-label">Name</label>
+                                <input type="text" placeholder="Type here" value="<%= locals.banner_data.bannername %>" class="form-control" id="banner_name" name="banner_name">
                                 <p class="perror mb-2" id="error1" style="display: none; color: red;"></p>
                             </div>
-                            <input type="hidden" name="id" value="<%=locals.brand_data._id %>">
+                            <input type="hidden" name="id" value="<%=locals.banner_data._id %>">
                             <div class="mb-4">
                                 <label for="status" class="form-label">Status</label>
                                 <select name="status" class="form-control" id="status" name="status">
@@ -33,7 +33,7 @@
                             <div class="mb-4">
                                     <div>
                                         <label for="img1"> Image</label>
-                                        <input type="file" id="brand_image" name="brand_image" class="form-control" accept="image/*">
+                                        <input type="file" id="banner_image" name="banner_image" class="form-control" accept="image/*">
                                         <br>
                                         <div class="row col-md-4" >
                                             <img id="imagePreview" src="#" alt="Image Preview" style="display: none;  max-width: 100px; max-height: 100px;">
@@ -42,12 +42,12 @@
                                         <p class="perror mb-2" id="error2" style="display: none; color: red;"></p>
                                         <br><br>
                                         <p>Old Image</p>
-                                        <img src="/public/image/<%= locals.brand_data.image %>" alt="Image Preview" style="max-width: 100px; max-height: 100px;">
+                                        <img src="/public/image/<%= locals.banner_data.image %>" alt="Image Preview" style="max-width: 100px; max-height: 100px;">
                                     </div>
                             </div>
                         <% } %>
                         <div class="d-grid">
-                            <button class="btn btn-primary">Edit brand</button>
+                            <button class="btn btn-primary">Edit Banner</button>
                         </div>
                     </form>
                 </div>
@@ -57,6 +57,6 @@
 </section> <!-- content-main end// -->
 
 
-<script src="/public/js/editBrand.js"></script>
+<script src="/public/js/editBanner.js"></script>
 
 <%- include('layout/footer.ejs') %>

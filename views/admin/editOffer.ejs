@@ -15,11 +15,11 @@
         <% } %>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-3"> 
                     
-                    <form id="editofferform">
+                    <form id="editofferform" method="post" action="/admin/edit-offer">
                         <% if(locals.offerdata) { %>
-                        <input type="hidden" id="offerid" value="<%= locals.offerdata._id %>">
+                        <input type="hidden" id="offerid" name="id" value="<%= locals.offerdata._id %>">
                         <div class="mb-4">
                             <label for="offertitle" class="form-label">Title</label>
                             <input type="text" placeholder="Type here" value="<%= locals.offerdata.offertitle %>" class="form-control" id="offertitle" name="offertitle">
@@ -34,24 +34,24 @@
                         </div>
                         <div class="mb-4">
                             <label for="offerdescription" class="form-label">Description</label>
-                            <input type="text" placeholder="Type here" value = "<%= locals.offerdata.offerdescription %>" class="form-control" id="offerdescription" name="offerdescription">
+                            <input type="text" placeholder="Type here" value = "<%= locals.offerdata.description %>" class="form-control" id="offerdescription" name="offerdescription">
                             <p class="perror mb-2" id="error2" style="display: none; color: red;"></p>
                         </div>
                         <div class="mb-4">
                             <label for="percentage" class="form-label">Discount Rate</label>
-                            <input type="number" placeholder="Type here" class="form-control" value="<%= locals.offerdata.percentage %>" id="percentage" name="percentage">
+                            <input type="number" placeholder="Type here" class="form-control" value="<%= locals.offerdata.discount %>" id="percentage" name="percentage">
                             <p class="perror mb-2" id="error3" style="display: none; color: red;"></p>
                         </div>
                         <% } %>
                         <div class="d-grid">
-                            <button class="btn btn-primary">Edit Offer</button>
+                            <button type="submit" class="btn btn-primary">Edit Offer</button>
                         </div>
                     </form>
                 </div>
                 
             </div> 
         </div> 
-    </div> 
+    </div>  
 </section> 
 
 

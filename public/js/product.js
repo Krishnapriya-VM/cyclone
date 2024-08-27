@@ -3,6 +3,7 @@ const addProductForm = document.getElementById('addProductForm')
 const productname = document.getElementById('productname')
 const procategory = document.getElementById('procategory')
 const brandname = document.getElementById('brandname')
+const offername = document.getElementById('offername')
 const stock = document.getElementById('stock')
 const price = document.getElementById('price')
 const description = document.getElementById('description')
@@ -18,6 +19,7 @@ const error7 = document.getElementById('error7')
 const priceError = document.getElementById('priceError')
 const catError = document.getElementById('catError')
 const stockerr = document.getElementById('stockerr')
+const offerError = document.getElementById('offerError')
 
 function pname(name)
 {   
@@ -56,6 +58,20 @@ function brandVal(name)
     else{
         brandError.innerHTML = ""
         brandError.style.display = "none"
+    }
+}
+
+function offerVal(name)
+{
+    console.log(name);
+    if(name.trim() === "")
+        {
+        offerError.innerHTML = "Please select Offer!";
+        offerError.style.display = "block";
+    }
+    else{
+        offerError.innerHTML = ""
+        offerError.style.display = "none"
     }
 }
 
@@ -186,6 +202,16 @@ brandname.addEventListener('blur', () => {
     brandVal(fdata);
 })
 
+offername.addEventListener('change', () => {
+    const fdata = offername.value;
+    offerVal(fdata);
+})
+
+offername.addEventListener('blur', () => {
+    const fdata = offername.value;
+    offerVal(fdata);
+})
+
 stock.addEventListener('keyup',()=>{
     const fdata = stock.value
     stockVal(fdata)
@@ -229,7 +255,7 @@ main.addEventListener('change',()=>{
     mainval(mdata,mmtype)
 }) 
 
-async function addProduct(pdata, ddata, catdata, bdata, prdata, sdata){
+async function addProduct(pdata, ddata, catdata, bdata, prdata, sdata, offdata){
     try {
         const mdata = main.files[0];
         const idata = imgs.files;
@@ -237,6 +263,7 @@ async function addProduct(pdata, ddata, catdata, bdata, prdata, sdata){
         formdata.append('productname', pdata);  
         formdata.append('procategory', catdata);
         formdata.append('brandname', bdata)
+        formdata.append('offername', offdata)
         formdata.append('description', ddata)
         formdata.append('stock', sdata)
         formdata.append('price', prdata)
@@ -270,6 +297,7 @@ addProductForm.addEventListener('submit',(e)=>{
     const ddata = description.value
     const catdata = procategory.value
     const bdata = brandname.value;
+    const offdata = offername.value;
     const prdata = price.value
     const sdata = stock.value
     const mdata = main.files.length
@@ -286,11 +314,12 @@ addProductForm.addEventListener('submit',(e)=>{
     catval(catdata)
     descVal(ddata)
     brandVal(bdata)
+    offerVal(offdata)
 
-    if(productNameError.innerHTML === "" || brandError.innerHTML === "" || descError.innerHTML ==="" || error6.innerHTML ==="" || error7.innerHTML ===""|| priceError.innerHTML ===""|| catError.innerHTML ===""|| stockerr.innerHTML ==="" )
+    if(productNameError.innerHTML === "" || brandError.innerHTML === "" || descError.innerHTML ==="" || error6.innerHTML ==="" || error7.innerHTML ===""|| priceError.innerHTML ===""|| catError.innerHTML ===""|| stockerr.innerHTML ==="" || offerError.innerHTML === "")
     {
         console.log("PRO");
-        addProduct(pdata, ddata, catdata, bdata, prdata, sdata)
+        addProduct(pdata, ddata, catdata, bdata, prdata, sdata, offdata)
     }
 })
 

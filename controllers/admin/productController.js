@@ -2,12 +2,26 @@ const path = require("path");
 const fs = require("fs").promises;
 const Category = require("../../models/categoryModel")
 const Product = require("../../models/productModel");
-const Brand = require("../../models/brandModel")
+const Brand = require("../../models/brandModel");
+const Offer = require("../../models/offerModel");
 
 const viewProducts = async(req,res)=>{
   try {
-    const product_data = await Product.find();
-    res.render('admin/viewproducts',{products: product_data})
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 6; 
+    const skip = (page - 1) * limit;
+
+    const totalProducts = await Product.countDocuments();
+    const totalPages = Math.ceil(totalProducts / limit);
+
+    const product_data = await Product.find().skip(skip).limit(limit);
+    res.render('admin/viewproducts',{
+      products: product_data,
+      currentPage: page,
+      totalPages: totalPages,
+      limit: limit
+    })
   } catch (error) {
     console.log(error.message);
   }
@@ -17,7 +31,8 @@ const loadProducts = async(req, res) =>{
     try {
         const category_data = await Category.find({isListed: 0})
         const brand_data = await Brand.find({isListed:0})
-        res.render("admin/product", { category: category_data, brand: brand_data})
+        const offer_data = await Offer.find({status: 1})
+        res.render("admin/product", { category: category_data, brand: brand_data, offer: offer_data})
     } catch (error) {
         res.status(500).render("error");
     }
@@ -25,7 +40,7 @@ const loadProducts = async(req, res) =>{
 
 const addProducts = async(req, res) =>{
     try {
-      const { productname, description, procategory, price, stock, brandname} = req.body;
+      const { productname, description, procategory, price, stock, brandname, offername} = req.body;
       console.log("FILES",req.files);
       let protrim = productname.trim();
       const isExist = await Product.findOne({ 
@@ -49,7 +64,8 @@ const addProducts = async(req, res) =>{
           price,
           mainimage: main,
           image: img,
-          stock
+          stock,
+          offer_id: offername
         };
 
         console.log(prodata);
@@ -65,10 +81,12 @@ const addProducts = async(req, res) =>{
       } else {
         const cdata = await Category.find({ status: 0 });
         const bdata = await Brand.find({status:0})
+        const offdata = await Offer.find({status: 0})
         res.status(400).json({
           err: "Product Already Exists.",
           category: cdata,
-          brand: bdata
+          brand: bdata,
+          offer: offdata
         });
       }
     } catch (error) {
@@ -81,11 +99,12 @@ const editProduct = async (req, res) => {
 
   try {
     const id = req.query.id
-    const prodata = await Product.findOne({ _id: id }).populate("category_id brand_id")
+    const prodata = await Product.findOne({ _id: id }).populate("category_id brand_id offer_id")
     console.log(prodata);
     const cdata = await Category.find({})
     const bdata = await Brand.find({})
-    res.render('admin/editProduct', { product: prodata, category: cdata, brand: bdata })
+    const offdata = await Offer.find({})
+    res.render('admin/editProduct', { product: prodata, category: cdata, brand: bdata, offer: offdata })
   } catch (error) {
     console.log(error.message)
   }
@@ -97,7 +116,7 @@ const postEditProduct = async (req, res) => {
   try {
     console.log(req.body);
     const id = req.body.id
-    const { productname, stock, procategory, price, description, brandname } = req.body;
+    const { productname, stock, procategory, price, description, brandname, offername } = req.body;
     
 
     let mainimage = '';
@@ -119,13 +138,13 @@ const postEditProduct = async (req, res) => {
 
     
     if (mainimage.length !== 0 && imgs.length !== 0) {
-      await Product.updateOne({ _id: id }, { productname: productname, stock: stock, brand_id: brandname, category_id: procategory, description: description, mainimage: mainimage, image: imgs , price: price})
+      await Product.updateOne({ _id: id }, { productname: productname, stock: stock, brand_id: brandname, category_id: procategory, offer_id: offername, description: description, mainimage: mainimage, image: imgs , price: price})
     } else if (mainimage.length === 0 && imgs.length !== 0) {
-      await Product.updateOne({ _id: id }, { productname: productname, stock: stock, brand_id: brandname, category_id: procategory, description: description, image: imgs, price: price })
+      await Product.updateOne({ _id: id }, { productname: productname, stock: stock, brand_id: brandname, category_id: procategory, offer_id: offername, description: description, image: imgs, price: price })
     } else if (mainimage.length !== 0 && imgs.length === 0) {
-      await Product.updateOne({ _id: id }, { productname: productname, stock: stock, brand_id: brandname, category_id: procategory, description: description, mainimage: mainimage, price: price })
+      await Product.updateOne({ _id: id }, { productname: productname, stock: stock, brand_id: brandname, category_id: procategory, offer_id: offername, description: description, mainimage: mainimage, price: price })
     } else {
-      await Product.updateOne({ _id: id }, { productname: productname, stock: stock, brand_id: brandname, category_id: procategory, description: description, price: price })
+      await Product.updateOne({ _id: id }, { productname: productname, stock: stock, brand_id: brandname, category_id: procategory, offer_id: offername, description: description, price: price })
     }
     console.log("EDITED");
     res.redirect('/admin/products');

@@ -86,6 +86,16 @@
                                     </select>        
                                     <p class="perror mb-2" id="catError" style="display: none; color: red;"></p>                                    
                                 </div>
+                                <div class="mb-4">
+                                    <label for="offername" class="form-label">Offers</label>
+                                    <select name="offername" class="form-control" id="offername">
+                                        <option value="">Select Offer</option>
+                                        <% if(locals.offer) { for(let i = 0 ; i < locals.offer.length ; i++) { %>
+                                            <option value="<%= locals.offer[i]._id %>"><%= locals.offer[i].offertitle %></option>
+                                            <% } } %>
+                                    </select>        
+                                    <p class="perror mb-2" id="offerError" style="display: none; color: red;"></p>                                    
+                                </div>
                             </div>
                         </div> <!-- card end// -->
                     </div>

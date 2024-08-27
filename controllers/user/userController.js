@@ -8,6 +8,9 @@ const flash = require('connect-flash');
 const securePassword = require("../../utils/password");
 
 const Product = require("../../models/productModel")
+const Category = require("../../models/categoryModel")
+const Brand = require("../../models/brandModel")
+const Banner = require("../../models/bannerModel") 
 
 // let from = "";
 const googleWindow = (req, res, next) => {
@@ -111,27 +114,29 @@ const loadHomePage = async (req, res) => {
 
   try {
     const userId = req.userid;
-    const product = await Product.find({isListed:0}).populate("category_id")
+    const product = await Product.find({isListed:0}).populate("category_id offer_id")
     const allowedProducts = product.filter(pro=>pro.category_id.isListed === 0).slice(0,5)
+
+    const banners = await Banner.find({isListed: 0});
+
     if (userId) {
       const user = await User.find({_id:userId});
       console.log(user);
       if (user) {
         console.log("dfsgdsf");
-        res.render('user/home-page', { user:user, products:allowedProducts});
+        res.render('user/home-page', { user:user, products:allowedProducts, banners: banners});
       } else {
         console.log("jhvjhv");
-        res.render('user/home-page', { products:allowedProducts})
+        res.render('user/home-page', { products:allowedProducts, banners: banners})
       }
     } else {
       console.log("hjvjhvjhv");
-      res.render('user/home-page', { products:allowedProducts});
+      res.render('user/home-page', { products:allowedProducts, banners: banners});
     }
   } catch (error) {
     console.log(error.message)
   }
 };
-
 
 
 const loadUserRegister = async (req, res) => {
@@ -530,7 +535,7 @@ const viewProduct = async (req, res) => {
   try {
     const id = req.query.id
     const user = req.user
-    const product = await Product.findOne({ _id: id }).populate("category_id brand_id");
+    const product = await Product.findOne({ _id: id }).populate("category_id brand_id offer_id");
     res.render('user/productDetails', { product, user })
   } catch (error) {
     console.log(error.message)
@@ -541,10 +546,102 @@ const viewProduct = async (req, res) => {
 const viewShop = async (req, res) => {
 
   try {
-    const id = req.query.id
-    const user = req.user
-    const product = await Product.find({}).populate("category_id brand_id");
-    res.render('user/shop', { product, user })
+    const sort = req.query.sort || 'default';
+    const id = req.query.id;
+    const user = req.user;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 6;
+    const categoryFilter = req.query.category || null;
+    const brandFilter = req.query.brand || null;
+    const searchQuery = req.query.search || null;
+
+    let sortQuery = {};
+    switch (sort) {
+      case "default":
+        sortQuery = {};
+        break;
+      case "new":
+        sortQuery = { _id: -1};
+        break;
+      case "LowToHigh":
+        sortQuery = { price: 1 };
+        break;
+      case "HighToLow":
+        sortQuery = { price: -1 };
+        break;
+      case "aA-zZ":
+        sortQuery = { productname: 1 };
+        break;
+      case "zZ-aA":
+        sortQuery = { productname: -1 };
+        break;
+      default:
+        sortQuery = {};
+    }
+
+    const categories = await Category.find({isListed: 0});
+    const brands = await Brand.find({isListed: 0});
+
+    const categoryCounts = await Product.aggregate([
+      { $match: { isListed: 0 } },
+      {$group:{_id: "$category_id", count: {$sum: 1}}}
+    ]);
+
+    const brandCounts = await Product.aggregate([
+      { $match: { isListed: 0 } },
+      {$group:{_id: "$brand_id", count: {$sum: 1}}}
+    ]);
+
+    console.log("CAT",categoryCounts)
+    console.log("BRANDCOUNTS", brandCounts)
+
+    console.log("BRANDSS",brands);
+
+    const categoriesWithCounts = categories.map(category => {
+      const count = categoryCounts.find(c => c._id.toString() === category._id.toString())?.count || 0;
+      return { ...category._doc, count };
+    });
+
+    console.log("COUNTS", categoriesWithCounts)
+  
+    const brandsWithCounts = brands.map(brand => {
+      const count = brandCounts.find((b) =>b._id.toString() === brand._id.toString())?.count || 0;
+      return { ...brand._doc, count };
+    
+  });
+
+    console.log("BRANDSWITHCOUNT", brandsWithCounts)
+
+    let filterQuery = {isListed: 0};
+    if (categoryFilter) {
+      filterQuery.category_id = categoryFilter;
+    }
+    if (brandFilter) {
+      filterQuery.brand_id = brandFilter;
+    }
+    if (searchQuery) {
+      filterQuery.productname = { $regex: searchQuery, $options: "i" }; 
+    }
+
+    const totalItems = await Product.countDocuments(filterQuery);
+
+    const product = await Product.find(filterQuery).sort(sortQuery).collation({ locale: 'en', strength: 2 }).skip((page - 1) * limit).limit(limit).populate("category_id brand_id offer_id");
+
+    res.render('user/shop', { 
+      product, 
+      user, 
+      sort, 
+      categories: categoriesWithCounts, 
+      brands: brandsWithCounts,
+      currentPage: page, 
+      totalPages: Math.ceil(totalItems / limit),
+      totalItems,
+      limit,
+      selectedCategory: categoryFilter,
+      selectedBrand: brandFilter,
+      searchQuery
+    })
+
   } catch (error) {
     console.log(error.message)
   }
