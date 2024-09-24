@@ -51,6 +51,10 @@
         right: -30px;
     }
 
+    .btn-add-cart[disabled] {
+    cursor: not-allowed; /* Disabled cursor */
+    }
+
 </style>
         <main class="main">
             <div class="category-banner-container bg-gray">
@@ -209,9 +213,17 @@
                                                     <div class="product-action">
                                                         <a href="javascript:void(0);" class="add-wish-btn" title="wishlist" data-productid="<%= locals.product[i]._id %>">
                                                             <i class="icon-heart"></i></a>
-                                                        <button class="btn-icon btn-add-cart" data-productid="<%= locals.product[i]._id %>">
-                                                            <i class="fa fa-arrow-right" ></i>
-                                                                <span >ADD TO CART</span></button>
+                                                        <% if(locals.product[i].stock === 0) {%>
+                                                            <button class="btn-icon btn-add-cart" data-productid="<%= locals.product[i]._id %>" disabled>
+                                                                <i class="fa fa-arrow-right" ></i>
+                                                                    <span >ADD TO CART</span>
+                                                            </button>
+                                                        <% }else{ %>
+                                                            <button class="btn-icon btn-add-cart" data-productid="<%= locals.product[i]._id %>">
+                                                                <i class="fa fa-arrow-right"></i>
+                                                                <span>ADD TO CART</span>
+                                                            </button>   
+                                                        <% } %>
                                                         <a href="/productdetails?id=<%= locals.product[i]._id%>" class="cart-detail-btn " title="Quick View"><i class="fas fa-external-link-alt"></i></a>
                                                     </div>
                                                 </div>

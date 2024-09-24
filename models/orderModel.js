@@ -36,6 +36,10 @@ const orderSchema = new mongoose.Schema({
         image:{
             type: String,
             required: true
+        },
+        returnReason:{
+            type: String,
+            required: false 
         }
     }],
     payment_method:{

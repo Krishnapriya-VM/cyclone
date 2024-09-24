@@ -7,6 +7,7 @@ const checkoutController = require("../controllers/user/checkoutController");
 const addressController = require("../controllers/user/addressController");
 const orderController = require("../controllers/user/orderController")
 const paymentController = require("../controllers/user/paymentController")
+const walletController = require("../controllers/user/walletController") 
 const userAuth = require("../middleware/userAuth");
 
 const passport = require("passport");
@@ -21,13 +22,15 @@ router.get("/user-profile",userAuth.isLoggedIn, userController.loadProfile);
 router.post("/user-profile",userAuth.isLoggedIn, userController.editProfile);
 router.get("/view-orders", userAuth.isLoggedIn, orderController.viewOrder);
 router.get("/order-details", userAuth.isLoggedIn, orderController.orderDetails);
+router.post('/retry-payment/:orderId', userAuth.isLoggedIn, paymentController.retryPayment);
+
 router.get("/change-password", userAuth.isLoggedIn, userController.loadChangePassword);
 router.post("/change-password", userAuth.isLoggedIn, userController.postChangePassword)
 
 router.get("/user-login", userAuth.isLoggedOut, userController.loadUserLogin);
 router.post("/user-login", userAuth.isLoggedOut, userController.postLogin);
 
-router.get("/reset-link", userAuth.isLoggedOut, userController.loadResetLink);
+router.get("/reset-link", userAuth.isLoggedOut, userController.loadResetLink);  
 router.post('/reset-link',userAuth.isLoggedOut , userController.postReset);
 
 router.get('/reset-otp',userAuth.isLoggedOut,userController.loadResetOtp);
@@ -72,8 +75,16 @@ router.get("/checkout", userAuth.isLoggedIn, checkoutController.loadCheckOut)
 
 router.post("/place-order", userAuth.isLoggedIn, paymentController.paymentConfirm);
 router.post("/verify-payment", userAuth.isLoggedIn, paymentController.verifyPayment)
+router.post("/cancel-order", userAuth.isLoggedIn, orderController.cancelOrder);
+router.post("/return-order", userAuth.isLoggedIn, orderController.returnOrder);
+
+router.get("/wallet", userAuth.isLoggedIn, walletController.loadWallet);
+router.post("/wallet/add-funds", userAuth.isLoggedIn, walletController.addFundsToWallet);
+router.post('/wallet/confirm-add-funds', userAuth.isLoggedIn, walletController.confirmAddFundsToWallet);
+router.post("/refund-to-wallet", userAuth.isLoggedIn, walletController.refundToWallet)
 
 router.get("/order", userAuth.isLoggedIn, orderController.loadOrders)
+router.get("/invoice", userAuth.isLoggedIn, orderController.loadInvoice)
 
 router.get("/logout",userAuth.isLoggedIn, userController.logOut);
 

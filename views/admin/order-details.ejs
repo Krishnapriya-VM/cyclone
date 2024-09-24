@@ -18,13 +18,11 @@
                 <div class="col-lg-6 col-md-6 ms-auto text-md-end">
                     <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
                         <option>Change status</option>
-                        <option>Awaiting payment</option>
                         <option>Confirmed</option>
                         <option>Shipped</option>
                         <option>Delivered</option>
+                        <option>Dispatched</option>
                     </select>
-                    <a class="btn btn-primary" href="#">Save</a>
-                    <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a>
                 </div>
             </div>
         </header> <!-- card-header end// -->
@@ -52,7 +50,7 @@
                         <div class="text">
                             <h6 class="mb-1">Order info</h6>
                             <p class="mb-1">
-                                Shipping: Fargo express <br> Pay method: <%= order.payment_method %> <br> Status: <%= order.payment_status %>
+                                Shipping: Fargo Express <br> Pay method: <%= order.payment_method %> <br> Status: <%= order.payment_status %>
                             </p>
                             <a href="#">Download info</a>
                         </div>
@@ -84,9 +82,10 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th width="40%">Product</th>
+                                    <th width="30%">Product</th>
                                     <th width="20%">Unit Price</th>
                                     <th width="20%">Quantity</th>
+                                    <th width="20%">Status</th>
                                     <th width="20%" class="text-end">Total</th>
                                 </tr>
                             </thead>
@@ -98,11 +97,25 @@
                                             <div class="left">
                                                 <img src="/public/image/<%= product.image %>" width="40" height="40" class="img-xs" alt="Item">
                                             </div>
-                                            <div class="info"> <%= product.product_id.name %> </div>
+                                            <div class="info"> <%= product.product_id.productname %> </div>
                                         </a>
                                     </td>
                                     <td> RS:<%= product.price %> </td>
                                     <td> <%= product.quantity %> </td>
+                                    <td>
+                                        <% if (product.status === 'Cancelled' || product.status === 'Returned') { %>
+                                            <span class="badge bg-danger">
+                                                <%= product.status %>
+                                            </span>
+                                        <% }else{ %>
+                                        <select class="form-select product-status" data-product-id="<%= product._id %>" data-order-id="<%= order._id %>">
+                                            <option>--Select--</option>
+                                            <option value="Dispatched" <%= product.status === 'Dispatched' ? 'selected' : '' %>>Dispatched</option>
+                                            <option value="Shipped" <%= product.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                            <option value="Delivered" <%= product.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                        </select>
+                                        <% } %>
+                                    </td>
                                     <td class="text-end"> Rs:<%= product.price * product.quantity %> </td>
                                 </tr>
                                 <% }); %>
@@ -119,7 +132,7 @@
                                                 <dd> <b class="h5">Rs: <%= order.total_amount %></b> </dd>
                                             </dl>
                                             <dl class="dlist">
-                                                <dt class="text-muted">Status:</dt>
+                                                <dt class="text-muted">Payment Status:</dt>
                                                 <dd>
                                                     <span class="badge rounded-pill alert-success text-success"><%= order.payment_status %></span>
                                                 </dd>
@@ -156,9 +169,52 @@
 </section>
 
 <script>
-    function handleStatus(element, userid){
-        
-    }
+    document.querySelectorAll('.product-status').forEach(select => {
+
+        select.addEventListener('change', async (event) => {
+            const productId = event.target.getAttribute('data-product-id');
+            const orderId = event.target.getAttribute('data-order-id');
+            const status = event.target.value;
+
+            try {
+                const res = await fetch('/admin/update-product-status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ productId, orderId, status })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Status updated successfully',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Failed!',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonText: 'Try Again'
+                    }).then((result)=>{
+                        if(result.isConfirmed){
+                            window.location.reload()
+                        }
+
+                    })  
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred while updating the status',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    });
 </script>
 
 

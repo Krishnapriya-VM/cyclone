@@ -181,7 +181,7 @@
                             </tfoot>
                         </table>
     
-                        <button type="button"  class="btn btn-dark btn-place-order" form="checkout-form">
+                        <button type="button" <%if(locals.sub === 0){%> disabled <%}%> class="btn btn-dark btn-place-order" form="checkout-form">
                             Place order
                         </button>
                     </div>
@@ -230,13 +230,12 @@
                     icon: 'success',
                     confirmButtonText: 'OK'
                 }).then(() => {
-                    
+                   
                     const totalPriceElement = document.querySelector('.order-total .total-price span');
                     const subtotal = parseInt(totalPriceElement.textContent.replace('Rs:', ''));
                     const newTotal = subtotal - result.discountAmount;
                     totalPriceElement.textContent = `Rs: ${newTotal}`;
 
-                    
                     document.getElementById('coupon-code').disabled = true;
                     document.querySelector('#apply-coupon-form button').disabled = true;
                 });

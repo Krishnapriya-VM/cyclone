@@ -73,22 +73,16 @@ async function razorOrderAPI(orderid,amount,userdata,orderIdDB)
             Swal.fire({
                 title: "PAYMENT FAILED!",
                 text: "Try using Other Options",
-                imageUrl: "/public/images/paymentfailed.png",
+                imageUrl: "/public/image/paymentfailed.png",
                 imageWidth: 200,
                 imageHeight: 200,
                 imageAlt: "Custom image",
                 confirmButtonText:"OK",
-                showDenyButton:true,
-                denyButtonText:"Cancel"
               })
               .then(res=>{
                 if(res.isConfirmed)
                 {
-                    cancelOrder(orderIdDB)
-                    window.location.reload()
-                }
-                if(res.isDenied)
-                {
+                    window.location.href = "/view-orders"
                     cancelOrder(orderIdDB)
                 }
               })
@@ -162,7 +156,7 @@ async function placeOrder(selectedAddress,selectedPaymentMethod) {
                         confirmButtonText: 'OK'
                     });
                 }
-
+  
             } else {
                 Swal.fire({
                     title: 'Error!',
@@ -272,5 +266,3 @@ async function placeOrder(selectedAddress,selectedPaymentMethod) {
         deleteAddress(addressId)
     })
    })
-
-   

@@ -154,6 +154,30 @@ const postEditProduct = async (req, res) => {
 
 }
 
+const editProductImage = async (req, res) =>{
+  try {
+    const { productId, filename, index } = req.body; 
+    console.log("PRODUCTID:",productId);
+    console.log("FILENAME:", filename);
+    console.log("INDEX",index);
+  
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.json({ success: false, message: 'Product not found' });
+    }
+
+    product.image.splice(index, 1);
+
+    await product.save();
+
+    res.json({ success: true, message: 'Image removed successfully' });
+  } catch (error) {
+    console.log(error.message);
+    res.json({ success: false, message: 'Error removing image' });
+  }
+}
+
 const productListUnlist = async (req, res) => {
 
   try {
@@ -200,5 +224,6 @@ module.exports = {
     editProduct,
     postEditProduct,
     productListUnlist,
-    viewProducts
+    viewProducts,
+    editProductImage
 }

@@ -20,7 +20,12 @@ const loadCheckOut = async (req, res) =>{
             return acc + (finalPrice * item.quantity)
         }, 0);
 
-        const coupons = await Coupon.find({ couponlimit: { $lte: subtotal }, status: '1' }).sort({reductionrate: -1});
+        const coupons = await Coupon.find({ 
+            couponlimit: { $lte: subtotal }, 
+            status: '1',
+            usedBy: { $not: { $elemMatch: { userid: userid } } }   
+            }).sort({reductionrate: -1});
+            
         const applicableCoupon = coupons.length > 0 ? coupons[0] : null;
 
 
@@ -43,7 +48,7 @@ const loadCheckOut = async (req, res) =>{
 const applyCoupon = async(req, res)=>{
     const userid = req.userid;
     const { couponCode } = req.body;
-
+    req.session.couponCode = couponCode
     try{
         const udata = await User.findById({_id: userid}).populate({
             path: 'cart.product_id',
@@ -69,6 +74,12 @@ const applyCoupon = async(req, res)=>{
             return res.status(400).json({message: `Coupon is not applicable. Minimum order amount should be Rs. ${coupon.couponlimit}.`});
         }
 
+        const isCouponUsed = coupon.usedBy.some( usage => usage.userid.toString() === userid.toString())
+
+        if(isCouponUsed){
+            return res.status(400). json({message: 'Coupon has already been used by this user.'})
+        }
+
         for(const item of udata.cart){
             const productPrice = item.product_id.price;
             const offer = item.product_id.offer_id;
@@ -80,16 +91,10 @@ const applyCoupon = async(req, res)=>{
             }
         }
 
-        const isCouponUsed = coupon.usedBy.some( usage => usage.userid.toString() === userid.toString())
-
-        if(isCouponUsed){
-            return res.status(400). json({message: 'Coupon has already been used by this user.'})
-        }
-
         const discountAmount = coupon.reductionrate;
-        coupon.usedBy.push({userid})
+        // coupon.usedBy.push({userid})
 
-        await coupon.save();
+        //await coupon.save();
 
         return res.status(200).json({discountAmount})
 

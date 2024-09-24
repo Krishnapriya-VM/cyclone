@@ -59,13 +59,18 @@
                                     <input type="file" id="imgs" name="imgs" class="form-control" accept="image/*" multiple>
                                     <br>
                                     <% for(let i=0; i< locals.product.image.length ; i++) { %>
-                                        <img src="/public/image/<%= locals.product.image[i] %>" alt="..." data-filename="<%= locals.product.image[i] %>" style=" height: 80px; width: 80px;"> 
+                                        <div style="display: inline-block; position: relative; margin-right: 10px;">
+                                        <img src="/public/image/<%= locals.product.image[i] %>" alt="..." data-filename="<%= locals.product.image[i] %>" data-productid="<%= locals.product._id %>" 
+                                        data-index="<%= i %>"  style=" height: 80px; width: 80px;"> 
+                                        <span class="remove-image" data-filename="<%= locals.product.image[i] %>" data-productid="<%= locals.product._id %>" 
+                                            data-index="<%= i %>"  style="position: absolute; top: 0; right: 0; background-color: black; color: white; padding: 0 5px; cursor: pointer;">&times;</span>
+                                        </div>
                                     <% } %>
                                     <div class="row mb-8" id="imagePreviews"></div>
                                     <p class="perror mb-2" id="error7" style="display: none; color: red;"></p>
                                 </div>
                             </div>
-                        </div> <!-- card end// -->
+                        </div> 
                     </div>
                     <div class="col-lg-3">
                         <div class="card mb-4">
@@ -121,6 +126,41 @@
                 </form>
     </div>
 </section>
+
+
+<script>
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('remove-image')) {
+            let filename = event.target.getAttribute('data-filename');
+            let productId = event.target.getAttribute('data-productid');
+            let index = event.target.getAttribute('data-index');
+            
+            // Send a request to the server to remove the image
+            fetch('/admin/remove-product-image', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    productId: productId,
+                    filename: filename, 
+                    index: index 
+                }),
+            }).then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Remove the image from the DOM
+                    event.target.parentElement.remove();
+                } else {
+                    document.getElementById('error7').style.display = 'block';
+                    document.getElementById('error7').textContent = data.message || 'Error removing image';
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    });
+</script>
 
 <script src="../../public/js/editProduct.js"></script>
 

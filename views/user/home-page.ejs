@@ -91,6 +91,25 @@
           margin-top: 1.3rem;
         }
 
+        .intro-section {
+        width: 100%;
+        }
+
+        .home-slide img {
+        width: 100%;
+        height: 100vh; /* Set the banner to full viewport height */
+        object-fit: cover; /* Ensures the image covers the area properly */
+        }
+
+        .container-fluid {
+            width: 100%;
+            padding-right: 0px;
+            padding-left: 0px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+
     </style>
     <link rel="stylesheet" type="text/css" href="/public/assets/vendor/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="/public/assets/vendor/simple-line-icons/css/simple-line-icons.min.css">
@@ -375,18 +394,20 @@
     </section> -->
 
     <section class="intro-section">
-        <div class="container">
-            <div class="home-slider slide-animate owl-carousel owl-theme owl-carousel-lazy">
-                <% banners.forEach(banner => { %>
-                <div class="home-slide banner d-flex flex-wrap">
-                    <div class="col-lg-12 p-0">
-                        <img src="/public/image/<%= banner.image %>" alt="Banner" style="width: 100%; height: 100%; object-fit: cover;">
-                    </div>
+        <div class="container-fluid"> <!-- Use container-fluid for full width -->
+            <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel" data-interval="3000">
+                <div class="carousel-inner">
+                    <% banners.forEach((banner, index) => { %>
+                        <div class="carousel-item <%= index === 0 ? 'active' : '' %>"> <!-- Set first slide as active -->
+                            <img class="d-block w-100" src="/public/image/<%= banner.image %>" alt="Banner" style="height: 100vh; object-fit: cover;">
+                        </div>
+                    <% }) %>
                 </div>
-                <% }) %>
             </div>
         </div>
     </section>
+    
+    
 
     <section class="popular-products">
         <div class="container">

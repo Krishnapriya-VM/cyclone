@@ -5,7 +5,8 @@ const jwt = require("../../utils/jwt");
 require("dotenv").config();
 
 const User = require('../../models/userModel');
-const Admin = require('../../models/adminModel')
+const Admin = require('../../models/adminModel');
+const Order = require("../../models/orderModel")
 
 const loadAdminLogin = async(req, res)=>{
     try {
@@ -55,6 +56,52 @@ const loadAdminHome = async(req, res) =>{
     }
 }
 
+
+const dashboardData = async (req, res) => {
+    try {
+      // Calculate total revenue
+      const totalRevenue = await Order.aggregate([
+        { $group: { _id: null, total: { $sum: "$total_amount" } } }
+      ]);
+      console.log("Revenue:",totalRevenue);
+  
+      // Count total number of orders
+      const totalOrders = await Order.countDocuments();
+      console.log("orders:", totalOrders);
+
+  
+      // Count total number of products sold
+      const totalProductsSold = await Order.aggregate([
+        { $unwind: "$products" },
+        { $group: { _id: null, total: { $sum: "$products.quantity" } } }
+      ]);
+      console.log("totalProductsSold:", totalProductsSold);
+
+  
+      // Fetch total number of users
+      const totalUsers = await User.countDocuments();
+      console.log("totalUsers", totalUsers);
+
+  
+      // Fetch recent orders
+      const recentOrders = await Order.find().sort({ date: -1 }).limit(5).populate('userid products.product_id');
+      console.log("recentOrders", recentOrders);
+
+  
+      // Send data to the frontend
+      res.json({
+        revenue: totalRevenue[0]?.total || 0,
+        orders: totalOrders,
+        productsSold: totalProductsSold[0]?.total || 0,
+        users: totalUsers,
+        recentOrders
+      });
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  };
+
 const loadLogout = async (req, res)=>{
     try {
       res.clearCookie("adminToken");
@@ -68,5 +115,6 @@ module.exports = {
     loadAdminLogin,
     adminLogin,
     loadAdminHome,
-    loadLogout
+    loadLogout,
+    dashboardData
 }

@@ -18,6 +18,7 @@ router.get("/admin-login", adminAuth.isLoggedOut, adminController.loadAdminLogin
 router.post("/admin-login",adminAuth.isLoggedOut, adminController.adminLogin)
 
 router.get("/admin-dashboard", adminAuth.isLoggedIn, adminController.loadAdminHome);
+router.get("/dashboard-data", adminAuth.isLoggedIn, adminController.dashboardData);
 router.get("/list-users", adminAuth.isLoggedIn, manageUser.loadUserList);
 router.get("/block-and-unblock-users", adminAuth.isLoggedIn, manageUser.userBlockAndUnBlock);
 
@@ -61,9 +62,11 @@ router.post("/edit-coupon", adminAuth.isLoggedIn, couponController.postEditCoupo
 
 router.get("/editProduct", adminAuth.isLoggedIn, productController.editProduct);
 router.post("/editProduct", adminAuth.isLoggedIn, upload.fields([{ name: "mainimage", maxCount: 1 },{ name: "imgs", maxCount: 4 }]), productController.postEditProduct);
+router.post("/remove-product-image", adminAuth.isLoggedIn, productController.editProductImage)
 
 router.get("/view-orders", adminAuth.isLoggedIn, orderController.getOrders);
 router.get('/order-details', adminAuth.isLoggedIn, orderController.viewOrderDetails);
+router.post("/update-product-status", adminAuth.isLoggedIn, orderController.updateProductStatus)
 
 router.get("/report", adminAuth.isLoggedIn, reportController.loadReportPage)
 router.get("/report/sales", adminAuth.isLoggedIn, reportController.getSalesReport);

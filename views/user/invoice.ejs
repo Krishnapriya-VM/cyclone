@@ -1,71 +1,191 @@
-<%- include("layout/header1.ejs") %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyclone</title>
+    <link rel="icon" type="image/x-icon" href="/public/assets/images/icons/favicon.png">
 
-<main class="main">
-    <div class="page-header">
-        <div class="container d-flex flex-column align-items-center">
-            <h1>My Account</h1>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .invoice-container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .invoice-header {
+            text-align: center;
+            margin-top: 60px;
+            position: relative;
+        }
+        .invoice-header img {
+            position: absolute;
+            top: -50px;
+            right: 20px;
+            height: 50px;
+        }
+        .invoice-header h2 {
+            margin: 0;
+        }
+        .order-info, .customer-info, .product-info {
+            margin-bottom: 20px;
+        }
+        .product-info table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .product-info th, .product-info td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .product-info th {
+            background-color: #f4f4f4;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .invoice-footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+        }
+        .print-btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .print-btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        .print-btn.hidden {
+            visibility: hidden;
+            opacity: 0;
+        }
+        .print-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <!-- Invoice Header -->
+        <div class="invoice-header">
+            <img src="/public/image/cyclone-logo.png" alt="Company Logo">
+            <h2>Invoice</h2>
+            <p>Order ID: <%= order._id %></p>
+            <p>Date: <%= new Date(order.date).toLocaleDateString() %></p>
+        </div>
+
+        <!-- Customer Information -->
+        <div class="customer-info">
+            <h4>Customer Information:</h4>
+            <p>
+                <strong>Name:</strong> <%= order.userid.fname %> <%= order.userid.lname %><br>
+                <strong>Email:</strong> <%= order.userid.email %><br>
+                <strong>Mobile:</strong> <%= order.userid.mobile_no %>
+            </p>
+        </div>
+
+        <!-- Shipping Address -->
+        <div class="order-info">
+            <h4>Shipping Address:</h4>
+            <p>
+                <%= order.address_id.fname %> <%= order.address_id.lname %><br>
+                <%= order.address_id.houseno %>, <%= order.address_id.street_address %><br>
+                <%= order.address_id.landmark %>, <%= order.address_id.town %><br>
+                <%= order.address_id.district %>, <%= order.address_id.state %><br>
+                <%= order.address_id.country %> - <%= order.address_id.pincode %><br>
+                <strong>Mobile:</strong> <%= order.address_id.mobile %>
+            </p>
+        </div>
+
+        <!-- Payment Information -->
+        <div class="order-info">
+            <h4>Payment Information:</h4>
+            <p>
+                <strong>Payment Method:</strong> <%= order.payment_method %><br>
+                <strong>Payment Status:</strong> <%= order.payment_status %>
+            </p>
+        </div>
+
+        <!-- Product Details -->
+        <div class="product-info">
+            <h4>Product Details:</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Unit Price (Rs)</th>
+                        <th>Total (Rs)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% order.products.forEach(product => { %>
+                    <tr>
+                        <td><%= product.product_id.productname %></td>
+                        <td><%= product.quantity %></td>
+                        <td><%= product.price %></td>
+                        <td><%= product.quantity * product.price %></td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="order-info text-right">
+            <p><strong>Subtotal: Rs <%= order.products.reduce((acc, product) => acc + product.quantity * product.price, 0) %></strong></p>
+            <p><strong>Grand Total: Rs <%= order.total_amount %></strong></p>
+        </div>
+
+        <!-- Footer -->
+        <div class="invoice-footer">
+            <p>Thank you for shopping with us!</p>
+            <p>For any questions or concerns, please contact customer support.</p>
         </div>
     </div>
 
-    <div class="container account-container custom-account-container">
-        <div class="row">
-            <div class="sidebar widget widget-dashboard mb-lg-0 mb-3 col-lg-3 order-0">
-                <ul class="nav nav-tabs list flex-column mb-0" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="dashboard-tab" data-toggle="tab" href="#dashboard"
-                            role="tab" aria-controls="dashboard" aria-selected="true">Dashboard</a>
-                    </li>
+    <!-- Print Invoice Button -->
+    <div class="print-btn-container">
+        <button class="print-btn" id="print-btn" onclick="handlePrint()">Download Invoice</button>
+    </div>
 
-                    <li class="nav-item">
-                        <a class="nav-link" id="order-tab" data-toggle="tab" href="#order" role="tab"
-                            aria-controls="order" aria-selected="true">Orders</a>
-                    </li>
+    <script>
+        function handlePrint() {
+            const printButton = document.getElementById("print-btn");
 
-                    <li class="nav-item">
-                        <a class="nav-link" id="download-tab" data-toggle="tab" href="#download" role="tab"
-                            aria-controls="download" aria-selected="false">Downloads</a>
-                    </li>
+            // Hide the button using visibility and opacity, keeping the layout intact
+            printButton.classList.add("hidden");
 
-                    <li class="nav-item">
-                        <a class="nav-link" id="address-tab" data-toggle="tab" href="#address" role="tab"
-                            aria-controls="address" aria-selected="false">Addresses</a>
-                    </li>
+            // Wait for 5 seconds before making the button visible again
+            setTimeout(() => {
+                printButton.classList.remove("hidden");
+            }, 5000);
 
-                    <li class="nav-item">
-                        <a class="nav-link" id="edit-tab" data-toggle="tab" href="#edit" role="tab"
-                            aria-controls="edit" aria-selected="false">Account
-                            details</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="shop-address-tab" data-toggle="tab" href="#shipping" role="tab"
-                            aria-controls="edit" aria-selected="false">Shopping Addres</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="wishlist.html">Wishlist</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout">Logout</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-lg-9 order-lg-last order-1 tab-content">
-                
-                <div class="tab-pane fade" id="download" role="tabpanel">
-                    <div class="download-content">
-                        <h3 class="account-sub-title d-none d-md-block"><i
-                                class="sicon-cloud-download align-middle mr-3"></i>Downloads</h3>
-                        <div class="download-table-container">
-                            <p>No downloads available yet.</p> <a href="category.html"
-                                class="btn btn-primary text-transform-none mb-2">GO SHOP</a>
-                        </div>
-                    </div>
-                </div><!-- End .tab-pane -->
+            // Trigger the print function
+            window.print();
+        }
+    </script>
 
-            </div><!-- End .tab-content -->
-        </div><!-- End .row -->
-    </div><!-- End .container -->
-
-    <div class="mb-5"></div><!-- margin -->
-</main><!-- End .main -->
-
-<%- include("layout/footer.ejs") %>
+</body>
+</html>

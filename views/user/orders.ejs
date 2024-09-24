@@ -27,6 +27,9 @@
                         <a class="nav-link" href="/change-password" role="tab" aria-controls="shipping" aria-selected="false">Change Password</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="/wallet">Wallet</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/wishlist">Wishlist</a>
                     </li>
                     <li class="nav-item">
@@ -57,7 +60,7 @@
                                                 <tr>
                                                     <td><%= order._id %></td>
                                                     <td><%= order.date.toLocaleDateString() %></td>
-                                                    <td><%= order.products[0].status %></td>
+                                                    <td><%= order.payment_status %></td>
                                                     <td>Rs:<%= order.total_amount %></td>
                                                     <td>
                                                         <a href="/order-details?id=<%= order._id %>" class="btn btn-dark view-details">VIEW DETAILS</a>
@@ -76,6 +79,34 @@
                                     </tbody>
                                 </table>
                                 <hr class="mt-0 mb-3 pb-2" />
+
+                                <% if (totalPages > 1) { %>
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination justify-content-center">
+                                            <% if (hasPrevPage) { %>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page=<%= prevPage %>" aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                        <span class="sr-only">Previous</span>
+                                                    </a>
+                                                </li>
+                                            <% } %>
+                                            <% for (let i = 1; i <= totalPages; i++) { %>
+                                                <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                                    <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                                                </li>
+                                            <% } %>
+                                            <% if (hasNextPage) { %>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page=<%= nextPage %>" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                        <span class="sr-only">Next</span>
+                                                    </a>
+                                                </li>
+                                            <% } %>
+                                        </ul>
+                                    </nav>
+                                <% } %>
     
                                 <a href="/shop" class="btn btn-dark">Go Shop</a>
                             </div>

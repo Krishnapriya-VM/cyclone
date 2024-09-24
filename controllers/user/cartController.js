@@ -21,6 +21,11 @@ const addToCart = async (req, res) =>{
         const isExist = await User.find({ _id: uid, "cart.product_id": id});
         if(isExist.length === 0){
             const pdata = await Product.findById({ _id: id});
+
+            if (pdata.isListed === 1) {
+                return res.json({ err: "Product is not listed!" });
+            }
+
             if(pdata.stock === 0){
                 res.json({err: "Out of Stock!"})
             }
